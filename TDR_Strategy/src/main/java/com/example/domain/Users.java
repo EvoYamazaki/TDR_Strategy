@@ -236,6 +236,7 @@ public class Users {
      * @mbg.generated Thu Jun 08 09:58:52 JST 2023
      */
     public void setPassword(String password) {
-        this.password = password == null ? null : password.trim();
+//        this.password = password == null ? null : new BCryptPasswordEncoder().encode(password.trim());
+    	this.password = password == null ? null : password.trim();
     }
 }

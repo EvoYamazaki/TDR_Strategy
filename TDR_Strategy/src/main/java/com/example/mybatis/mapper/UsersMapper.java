@@ -25,7 +25,8 @@ public interface UsersMapper {
 	@Insert({
 		"insert into users (name,email,password) values (#{name}, #{email}, #{password})"
 	})
-	  int insert(@Param("name") String name, @Param("emial") String emial, @Param("password") String password);
+	  int userInsert(@Param("name") String name, @Param("email") String emial, @Param("password") String password);
+	
 	//ここまで
 	
 	
