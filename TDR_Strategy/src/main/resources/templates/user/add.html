@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
 <title>ユーザー新規登録</title>
-<link href="/css/add.css" rel="stylesheet"></link>
+<link href="@{/static/css/add.css}" rel="stylesheet"></link>
 <meta charset="utf-8" />
 </head>
 <body>
@@ -27,5 +27,8 @@
 </table>
 <div class="btn_area_center"><input type="submit" value="登録" class="btn"></div>
 </form>
+<p>
+	すでにアカウントをお持ちの方は<a href="login.html">こちら</a>
+</p>
 </body>
 </html>

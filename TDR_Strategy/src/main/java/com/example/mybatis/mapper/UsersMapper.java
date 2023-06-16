@@ -15,12 +15,21 @@ import com.example.domain.UsersExample;
 
 @Mapper
 public interface UsersMapper {
+	@Select({
+	    "select * from users where id = #{id} limit 1"
+	})
+	List<Users> selectById(Integer id);
 	
 	//追加
 	@Select({
 	    "select * from users where email = #{email} limit 1"
 	})
 	Users selectByEmail(String email);
+	
+	@Select({
+	    "select name from users where id = #{id} limit 1"
+	})
+	String selectNameById(Integer id);
 	
 	@Insert({
 		"insert into users (name,email,password) values (#{name}, #{email}, #{password})"

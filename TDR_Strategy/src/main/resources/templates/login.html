@@ -10,6 +10,7 @@
         <div th:if="${param.logout}">
             ログアウトされました。
         </div>
+        <h1>ログイン</h1>
         <form th:action="@{/login}" method="post">
 			<table class="table table-bordered col-md-6">
 				<tr class="form-group">
@@ -23,5 +24,8 @@
 				</table>
 	            <div><input type="submit" value="ログイン"/></div>
         </form>
+        <p>
+			新規登録は<a href="http://localhost:8080/user/add">こちら</a>
+		</p>
     </body>
 </html>
