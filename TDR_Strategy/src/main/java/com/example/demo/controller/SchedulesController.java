@@ -5,9 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.domain.Bookmarks;
@@ -20,27 +23,30 @@ import com.example.mybatis.mapper.UsersMapper;
 
 @RequestMapping("")
 @Controller
-public class HomeController {
+public class SchedulesController {
 	@Autowired
     private SchedulesMapper schedulesMapper;
-	@Autowired
-    private UsersMapper usersMapper;
 	@Autowired
     private RelationshipsMapper RelationshipsMapper;
 	@Autowired
     private BookmarksMapper bookmarksMapper;
+	@Autowired
+	private UsersMapper usersMapper;
 	
-	//投稿一覧の表示(一旦)
-	@GetMapping("/home")
-	public String indexSchedules(Model model) {
-		//Schedulesの取得
-		List<Schedules> allSchedules = schedulesMapper.selectByExample(null);
+	//投稿詳細ページ
+	@GetMapping("schedule/{id}")
+	public String sucheduleDetailPage(
+		@PathVariable Integer id,
+		Model model,
+		@AuthenticationPrincipal UserDetails userDetails){
+//			Integer loginUserId = getUserId(userDetails);
+		//Scheduleの取得
+		Schedules schedule = schedulesMapper.selectByPrimaryKey(id);
 		//表示用のデータリスト
-		List<List<String>> schedulesView = new ArrayList<>();
+		List<String> scheduleList = new ArrayList<>();
 		
 		//要素を１つずつ取り出し、表示用のリストへ格納していく
-		for(Schedules schedule: allSchedules) {
-			List<String> scheduleList = new ArrayList<String>();
+//		for(Schedules schedule: schedules) {
 			//投稿者の名前を格納
 			scheduleList.add(usersMapper.selectNameById(schedule.getUserId()));
 			//パークを格納
@@ -84,16 +90,14 @@ public class HomeController {
 			List<Bookmarks> bookmarksList = bookmarksMapper.selectBySchedule_id(schedule.getId());
 			scheduleList.add(String.valueOf(bookmarksList.size()));
 			
+			//本文の格納
+			scheduleList.add(schedule.getSchedule());
+			
 			//useridを取得（ユーザー画面遷移用）
 			scheduleList.add(schedule.getUserId().toString());
-			
-			//idを取得（投稿詳細画面遷移用）
-			scheduleList.add(schedule.getId().toString());
-					
-			//表示用のデータリストに格納
-			schedulesView.add(scheduleList);
-		}
-		model.addAttribute("schedulesView", schedulesView);
-	    return "home";
+//		}
+		model.addAttribute("scheduleList", scheduleList);
+		
+		return "schedule";
 	}
 }

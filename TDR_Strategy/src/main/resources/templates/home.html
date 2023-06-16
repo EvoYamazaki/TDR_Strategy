@@ -9,45 +9,46 @@
     <div class="container">
         <h1 class="mb-5">TDR_Strategy</h1>
         <h3>最新の投稿</h3>
-        <table th:each="scheduleList : ${schedulesView}" class="align-middle">
-	        <tr>
-	        	<th>ユーザー名</th>
-	        	<th>:</th>
-		        <td>
-		        	<a th:href="@{/user/userpage/{id}(id=${scheduleList[5]})}">
-		        		<div  th:text="${scheduleList[0]}"></div>
-		        	</a>
-		        </td>
-			</tr>
-	        <tr>
-	        	<th>パーク</th>
-	        	<th>:</th>
-	        	<td th:text="${scheduleList[1]}"></td>
-			</tr>
-			<tr>
-	        	<th>来園日</th>
-	        	<th>:</th>
+	        <table th:each="scheduleList : ${schedulesView}" class="align-middle">
 	        	
-	        	<td th:text="${scheduleList[2]}"></td>
-
-			</tr>
-			<tr>
-	        	<th>利用シーン</th>
-	        	<th>:</th>
-	        	<td th:text="${scheduleList[3]}"></td>
-			</tr>
-			<tr>
-	        	<th>ブクマ数</th>
-	        	<th>:</th>
-	        	<td th:text="${scheduleList[4]}"></td>
-			</tr>
-			<tr>
-				<th></th>
-			</tr>
-			<tr>
-				<th></th>
-			</tr>
-		</table>
+		        <tr>
+		        	<th>ユーザー名</th>
+		        	<th>:</th>
+			        <td>
+			        	<a th:href="@{/user/userpage/{id}(id=${scheduleList[5]})}">
+			        		<div  th:text="${scheduleList[0]}"></div>
+			        	</a>
+			        </td>
+				</tr>
+		        <tr>
+		        	<th>パーク</th>
+		        	<th>:</th>
+		        	<td th:text="${scheduleList[1]}"></td>
+				</tr>
+				<tr>
+		        	<th>来園日</th>
+		        	<th>:</th>
+		        	
+		        	<td th:text="${scheduleList[2]}"></td>
+	
+				</tr>
+				<tr>
+		        	<th>利用シーン</th>
+		        	<th>:</th>
+		        	<td th:text="${scheduleList[3]}"></td>
+				</tr>
+				<tr>
+		        	<th>ブクマ数</th>
+		        	<th>:</th>
+		        	<td th:text="${scheduleList[4]}"></td>
+				</tr>
+				<tr>
+					
+				</tr>
+				<tr>
+				</tr>
+			
+			</table>
     </div>
     <script src="@{/webjars/jquery/3.4.1/jquery.min.js}"></script>
     <script src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}"></script>

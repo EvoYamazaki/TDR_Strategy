@@ -3,31 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.min.css}">
-<title>ユーザーぺージ</title>
+<title>投稿詳細</title>
 </head>
 <body>
-<h1>ユーザーページ</h1>
-<table th:object="${userData}">
-	<tr>
-		<th>ユーザー名：</th>
-		<th th:text="${userData[0]}"></th>
-	</tr>
-	<tr>
-		<th>年齢：</th>
-		<th th:text="${userData[1]}"></th>
-	</tr>
-	<tr>
-		<td th:text="${userData[2]}"></td>
-	</tr>
-	<tr>
-		
-	</tr>
-</table>
-	<table th:each="scheduleList : ${schedulesView}" class="align-middle">
+<h1>投稿詳細</h1>
+
+	<table th:object="${scheduleList}" class="align-middle">
         <tr>
         	<th>ユーザー名</th>
         	<th>:</th>
-        	<td th:text="${scheduleList[0]}"></td>
+        	<td>
+        		<a th:href="@{/user/userpage/{id}(id=${scheduleList[6]})}">
+        			<div th:text="${scheduleList[0]}"></div>
+        		</a>
+        	</td>
 		</tr>
         <tr>
         	<th>パーク</th>
@@ -53,6 +42,9 @@
 		</tr>
 		<tr>
 			<br>
+		</tr>
+		<tr>
+			<td th:text="${scheduleList[5]}"></td>
 		</tr>
 	</table>
 </body>
