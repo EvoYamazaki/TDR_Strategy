@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Insert title here</title>
+	</head>
+	<body>
+		<header>
+			<table>
+				<tr>
+					<th>
+						<h3><a href="/home">TDR_Strategy</a></h3>
+					</th>
+					<td>
+						<nav>
+							<ul>
+								<li><a href="/schedule/search">検索</a></li>
+								<li><a href="/about">ABOUT</a></li>
+								<!-- ログイン状態に応じて表示を切り替え -->
+								<li th:if="${isLoggedIn}"><a href="/post">投稿</a></li>
+								<li th:unless="${isLoggedIn}"><a href="/login">ログイン</a></li>
+								<li th:unless="${isLoggedIn}"><a href="/user/add">新規登録</a></li>
+								<li th:if="${isLoggedIn}">
+									<form th:action="@{/logout}" method="post">
+										<input type="submit" value="Sign Out"/>
+									</form>
+								</li>
+							</ul>
+						</nav>
+					</td>
+				</tr>
+			</table>
+		  
+		</header>
+	</body>
+</html>

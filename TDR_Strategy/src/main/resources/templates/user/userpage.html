@@ -6,6 +6,7 @@
 <title>ユーザーぺージ</title>
 </head>
 <body>
+<div th:replace="header :: header"></div>
 <h1>ユーザーページ</h1>
 <table th:object="${userData}">
 	<tr>
@@ -20,7 +21,7 @@
 		<td th:text="${userData[2]}"></td>
 	</tr>
 	<tr>
-		
+		<th th:if="${isMypage}"><a href="/user/edit">プロフィール編集</a></th>
 	</tr>
 </table>
 	<table th:each="scheduleList : ${schedulesView}" class="align-middle">
@@ -52,8 +53,14 @@
         	<td th:text="${scheduleList[4]}"></td>
 		</tr>
 		<tr>
+			<th>
+				<a th:href="@{/schedule/{id}(id=${scheduleList[5]})}" th:text="詳細"></a>
+			</th>
+		</tr>
+		<tr>
 			<br>
 		</tr>
 	</table>
+	
 </body>
 </html>

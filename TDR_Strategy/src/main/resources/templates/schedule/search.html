@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmls:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<title>スケジュール検索</title>
+		<link rel="stylesheet" href="@{/css/style.css}" />
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+	</head>
+	<body>
+		<div th:replace="header :: header"></div>
+		<h1>スケジュール検索</h1>
+	
+		<form th:action="@{/schedule/search}" method="post">
+			<!-- パーク選択ラジオボタン -->
+			<div>
+				<label>パーク選択</label>
+				<br />
+				<input type="radio" id="parkDisneyLand" name="park" value="0" />
+				<label for="parkDisneyLand">東京ディズニーランド</label>
+				<br />
+				<input type="radio" id="parkDisneySea" name="park" value="1" />
+				<label for="parkDisneySea">東京ディズニーシー</label>
+			</div>
+			<br />
+			
+			<!-- キーワードからあいまい検索 -->
+			<div>
+				<label for="keyword">キーワードから検索</label>
+				<br />
+				<input type="text" id="keyword" name="keyword" placeholder="キーワードを入力" />
+				<button type="submit">検索！</button>
+			</div>
+			<br />
+			
+			<!-- 利用シーン選択チェックボックス -->
+			<div>
+    				<label for="scenes">利用シーンから絞り込み</label>
+    				<br />
+    				<div th:each="scene : ${allScenes}">
+    					<input type="checkbox" id="scene" name="scenes" th:value="${scene.id}" th:checked="${scene.selected}" />
+    					<label th:for="${'scene' + scene.id}" th:text="${scene.useSceneName}"></label>
+					</div>
+			</div>
+			<br />
+
+				<!-- 平日/休日選択ラジオボタン -->
+			<div>
+				<label for="holiday">平日/土日祝から絞り込み</label>
+				<br />
+				<input type="radio" id="weekend" name="holiday" value="false" />平日
+				<input type="radio" id="holiday" name="holiday" value="true" />土日祝
+			</div>
+			<br />
+			
+			<div>
+				<button type="submit">検索！</button>
+			</div>
+		</form>
+		
+		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+        <script defer src="https://use.fontawesome.com/releases/v5.7.2/js/all.js"></script>
+
+	</body>
+</html>
+

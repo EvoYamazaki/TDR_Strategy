@@ -5,12 +5,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.domain.Bookmarks;
@@ -39,7 +42,17 @@ public class SchedulesController {
 		@PathVariable Integer id,
 		Model model,
 		@AuthenticationPrincipal UserDetails userDetails){
-//			Integer loginUserId = getUserId(userDetails);
+		//ログイン情報の取得
+	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	    String loggedInUsername = authentication.getName();
+	    System.out.println(loggedInUsername);
+//	    boolean isLoggedIn = authentication.isAuthenticated();
+	    boolean isLoggedIn = true;
+	    if(loggedInUsername == "anonymousUser") {
+	    	isLoggedIn = false;
+	    }
+	    model.addAttribute("isLoggedIn", isLoggedIn);
+	    
 		//Scheduleの取得
 		Schedules schedule = schedulesMapper.selectByPrimaryKey(id);
 		//表示用のデータリスト
@@ -99,5 +112,16 @@ public class SchedulesController {
 		model.addAttribute("scheduleList", scheduleList);
 		
 		return "schedule";
+	}
+	
+	@PostMapping("schedule/{id}/")
+	public String bookmarkRegister(
+		@PathVariable Integer id,
+		Model model,
+		@AuthenticationPrincipal UserDetails userDetails){
+		
+		
+		
+		return "schedule/" + id;
 	}
 }

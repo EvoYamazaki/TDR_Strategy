@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import com.example.domain.Schedules;
+
 public class GeneratePass {
 
     public static void main(String[] args) {
@@ -31,5 +33,36 @@ public class GeneratePass {
         		System.out.println(listList.get(i).get(j));
         	}
         }
+        
+        String useScenesList;
+        List<Integer> scenes = new ArrayList<>();
+        scenes.add(1);
+        scenes.add(2);
+        scenes.add(3);
+        scenes.add(4);
+		StringBuilder sb = new StringBuilder();
+		Integer useScenesCount = 0;
+		if(scenes.size() != 0) {
+			for (int i = 0; i < scenes.size(); i++) {
+				sb.append(scenes.get(i));
+				if(i != scenes.size() -1) {
+					sb.append(", ");
+				}
+				useScenesCount ++;
+			}
+//			System.out.println("if");
+			useScenesList = sb.toString();
+			
+		} else {
+			useScenesList = null;
+		}
+		System.out.println(useScenesList);
+		System.out.println(useScenesCount);
+		
+		List<Schedules> searchResults = new ArrayList<>();
+		if(searchResults.size() != 0) {
+			System.out.println(searchResults);
+		}
+		
     }
 }

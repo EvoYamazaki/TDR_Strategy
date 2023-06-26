@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,6 +35,18 @@ public class HomeController {
 	//投稿一覧の表示(一旦)
 	@GetMapping("/home")
 	public String indexSchedules(Model model) {
+		//ログイン情報の取得
+	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	    String loggedInUsername = authentication.getName();
+	    System.out.println(loggedInUsername);
+//	    boolean isLoggedIn = authentication.isAuthenticated();
+	    boolean isLoggedIn = true;
+	    if(loggedInUsername == "anonymousUser") {
+	    	isLoggedIn = false;
+	    }
+	    model.addAttribute("isLoggedIn", isLoggedIn);
+		
+		
 		//Schedulesの取得
 		List<Schedules> allSchedules = schedulesMapper.selectByExample(null);
 		//表示用のデータリスト
@@ -42,6 +56,7 @@ public class HomeController {
 		for(Schedules schedule: allSchedules) {
 			List<String> scheduleList = new ArrayList<String>();
 			//投稿者の名前を格納
+			
 			scheduleList.add(usersMapper.selectNameById(schedule.getUserId()));
 			//パークを格納
 			switch(schedule.getPark()) {

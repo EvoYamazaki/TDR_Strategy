@@ -9,13 +9,20 @@ import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.ResultMap;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
+import org.springframework.stereotype.Repository;
 
 import com.example.domain.Schedules;
 import com.example.domain.SchedulesExample;
 
+@Repository
 @Mapper
 public interface SchedulesMapper {
 	//追加
+	@Select({
+	    "select * from schedules"
+	})
+	List<Schedules> selectAll();
+	
 	@Select({
 	    "select * from schedules where user_id = #{user_id}"
 	})
@@ -25,6 +32,103 @@ public interface SchedulesMapper {
 	    "select * from schedules where id = #{id}"
 	})
 	List<Schedules> selectById(Integer id);
+	
+	@Select({
+	    "select user_id from schedules where id = #{id}"
+	})
+	Integer selectUserIdById(Integer id);
+	
+	//すべての項目で検索
+	@Select({
+		"SELECT s.*",
+		"FROM schedules s",
+		"JOIN relationships r ON s.id = r.schedule_id",
+		"JOIN use_scenes u ON r.use_scene_id = u.id",
+		"WHERE u.id IN (${useScenesList})",
+		"  AND s.schedule LIKE '%${searchWord}%'",
+		"  AND s.park = ${park}",
+		"  AND s.holiday = ${holiday}",
+		"GROUP BY s.id",
+		"HAVING COUNT(DISTINCT u.id) = ${useScenesCount}"
+	})
+	List<Schedules> searchSchedulesAll(String useScenesList, String searchWord, Integer park, Boolean holiday, Integer useScenesCount);
+	
+	//holidayが未入力
+	@Select({
+		"SELECT s.*",
+		"FROM schedules s",
+		"JOIN relationships r ON s.id = r.schedule_id",
+		"JOIN use_scenes u ON r.use_scene_id = u.id",
+		"WHERE u.id IN (${useScenesList})",
+		"  AND s.schedule LIKE '% ${searchWord} %'",
+		"  AND s.park = ${park}",
+		"GROUP BY s.id",
+		"HAVING COUNT(DISTINCT u.id) = ${useScenesCount}"
+	})
+	List<Schedules> searchSchedulesUP(String useScenesList, String searchWord, Integer park, Integer useScenesCount);
+	
+	//parkが未入力
+	@Select({
+		"SELECT s.*",
+		"FROM schedules s",
+		"JOIN relationships r ON s.id = r.schedule_id",
+		"JOIN use_scenes u ON r.use_scene_id = u.id",
+		"WHERE u.id IN (${useScenesList})",
+		"  AND s.schedule LIKE '%${searchWord}%'",
+		"  AND s.holiday = ${holiday}",
+		"GROUP BY s.id",
+		"HAVING COUNT(DISTINCT u.id) = ${useScenesCount}"
+	})
+	List<Schedules> searchSchedulesUH(String useScenesList, String searchWord, Boolean holiday, Integer useScenesCount);
+	
+	//useSceneが未選択
+	@Select({
+		"SELECT *",
+		"FROM schedules",
+		"WHERE schedule LIKE '%${searchWord}%'",
+		"  AND park = ${park}",
+		"  AND holiday = ${holiday}"
+	})
+	List<Schedules> searchSchedulesPH(String searchWord, Integer park, Boolean holiday);
+	
+	//holidayとparkが未入力
+	@Select({
+		"SELECT s.*",
+		"FROM schedules s",
+		"JOIN relationships r ON s.id = r.schedule_id",
+		"JOIN use_scenes u ON r.use_scene_id = u.id",
+		"WHERE u.id IN (${useScenesList})",
+		"  AND s.schedule LIKE '%${searchWord}%'",
+		"GROUP BY s.id",
+		"HAVING COUNT(DISTINCT u.id) = ${useScenesCount}"
+	})
+	List<Schedules> searchSchedulesU(String useScenesList, String searchWord, Integer useScenesCount);
+	
+	//holidayとuseSceneが未入力
+	@Select({
+		"SELECT *",
+		"FROM schedules",
+		"WHERE schedule LIKE '%${searchWord}%'",
+		"  AND park = ${park}",
+	})
+	List<Schedules> searchSchedulesP(String searchWord, Integer park);
+	
+	//parkとuseSceneが未入力
+	@Select({
+		"SELECT *",
+		"FROM schedules",
+		"WHERE schedule LIKE '%${searchWord}%'",
+		"  AND holiday = ${holiday}"
+	})
+	List<Schedules> searchSchedulesH(String searchWord, Boolean holiday);
+	
+	//検索ワードのみ（検索ワードが未入力の場合は全検索）
+	@Select({
+		"SELECT *",
+		"FROM schedules",
+		"WHERE schedule LIKE '%${searchWord}%'"
+	})
+	List<Schedules> searchSchedulesW(String searchWord);
 	
 	//ここまで
     /**

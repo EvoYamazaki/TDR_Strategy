@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -58,10 +59,21 @@ public class UsersController {
 	*/
 	@GetMapping("/user/add")
 	public String displayAdd(Model model) {
-	// 入力フォームで取り扱うオブジェクトを設定
-	model.addAttribute("users", new Users());
-	// 表示するHTMLを指定
-	return "user/add";
+		//ログイン情報の取得
+	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	    String loggedInUsername = authentication.getName();
+	    System.out.println(loggedInUsername);
+//	    boolean isLoggedIn = authentication.isAuthenticated();
+	    boolean isLoggedIn = true;
+	    if(loggedInUsername == "anonymousUser") {
+	    	isLoggedIn = false;
+	    }
+	    model.addAttribute("isLoggedIn", isLoggedIn);
+	    
+		// 入力フォームで取り扱うオブジェクトを設定
+		model.addAttribute("users", new Users());
+		// 表示するHTMLを指定
+		return "user/add";
 	}
 
 
@@ -93,6 +105,27 @@ public class UsersController {
 		@PathVariable Integer id,
 		Model model,
 		@AuthenticationPrincipal UserDetails userDetails) {
+		//ログイン情報の取得
+	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	    String loggedInUsername = authentication.getName();
+	    System.out.println(loggedInUsername);
+//	    boolean isLoggedIn = authentication.isAuthenticated();
+	    boolean isLoggedIn = true;
+	    if(loggedInUsername == "anonymousUser") {
+	    	isLoggedIn = false;
+	    }
+	    model.addAttribute("isLoggedIn", isLoggedIn);
+	    
+	    //アクセスしたページとログインIDが一致するか確認
+	    if(isLoggedIn) {
+	    	Integer loginUserId = getUserId(userDetails);
+		    boolean isMypage = false;
+		    if(loginUserId == id) {
+		    	isMypage = true;
+		    }
+		    model.addAttribute("isMypage", isMypage);
+	    }
+	    
 //		Integer loginUserId = getUserId(userDetails);
 		//Userの取得
 		List<Users> userList = usersMapper.selectById(id);
@@ -168,6 +201,9 @@ public class UsersController {
 			//ブクマ数を格納
 			List<Bookmarks> bookmarksList = bookmarksMapper.selectBySchedule_id(schedule.getId());
 			scheduleList.add(String.valueOf(bookmarksList.size()));
+			
+			//idを取得（投稿詳細画面遷移用）
+			scheduleList.add(schedule.getId().toString());
 			
 			//表示用のデータリストに格納
 			schedulesView.add(scheduleList);
