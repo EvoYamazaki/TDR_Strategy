@@ -91,11 +91,11 @@ public class SchedulesSearchController {
 			}
 			selectUseScenes = sb.toString();
 		}
-		System.out.println(park);
-		System.out.println(keyword);
-		System.out.println(selectUseScenes);
-		System.out.println(holiday);
-		System.out.println(useScenesCount);
+//		System.out.println(park);
+//		System.out.println(keyword);
+//		System.out.println(selectUseScenes);
+//		System.out.println(holiday);
+//		System.out.println(useScenesCount);
 		
 		//検索メソッドの呼び出し
 		List<Schedules> searchResults = new ArrayList<>();
@@ -218,6 +218,14 @@ public class SchedulesSearchController {
 	    	isLoggedIn = false;
 	    }
 	    model.addAttribute("isLoggedIn", isLoggedIn);
+//	    
+//	    //検索結果の取得
+//	    List<Schedules> schedulesView = (List<Schedules>) model.getAttribute("schedulesView");
+//	    //結果件数の取得
+//	  	int scheduleCount = (int) model.getAttribute("scheduleCount");
+//	  	
+//		model.addAttribute("schedulesView", schedulesView);
+//		model.addAttribute("scheduleCount", scheduleCount);
     	
     	return "schedule/results";
     }

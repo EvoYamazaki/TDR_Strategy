@@ -218,7 +218,7 @@ public class UsersController {
 	
 	
 	//ユーザーページ(ブックマーク)
-	@GetMapping("/user/userpage/bookmarks/{id}")
+	@GetMapping("/user/bookmarks/{id}")
 	public String userBookmarkPage(
 		@PathVariable Integer id,
 		Model model,
@@ -278,7 +278,7 @@ public class UsersController {
 		for(Schedules schedule: userSchedules) {
 			List<String> scheduleList = new ArrayList<String>();
 			//投稿者の名前を格納
-			scheduleList.add(usersMapper.selectNameById(id));
+			scheduleList.add(usersMapper.selectNameById(schedulesMapper.selectUserIdById(schedule.getId())));
 			//パークを格納
 			switch(schedule.getPark()) {
 				case 0:
@@ -331,6 +331,6 @@ public class UsersController {
 		//user_idを渡す（ブックマーク表示用）
 		model.addAttribute("id", id);
 		
-		return "user/userpage/bookmarks/" + id;
+		return "user/bookmarks";
 	}
 }

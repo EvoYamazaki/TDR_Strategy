@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<title>退会画面</title>
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">	
+	</head>
+	<body>
+		<div class="container">
+			<h1>退会</h1>
+			<br>
+			<h2>【会員退会の注意】</h2>
+			<br>
+			<p>退会手続きを行うと、あなたのアカウントおよび関連するデータが永久に削除され、復旧することはできません。<br>以下の点に留意してください:
+			<br><br>1. 退会後、アカウント情報、プロフィール、投稿履歴、保存データなど、すべての個人情報が完全に削除されます。
+			<br>2. 退会後も、過去のデータの復元はできません。十分にご理解いただき、慎重にお考えください。
+			<br>3. 退会手続きの後、当サービスを再利用する場合は、新たにアカウントを作成する必要があります。
+			<br><br>【注意】退会はデータの完全削除を伴う重要な手続きです。慎重にご判断ください。
+			<form method="post" action="/user/complete-withdraw">
+				<form th:action="@{/logout}" method="post">
+        			<input type="submit" class="btn btn-danger" value="退会する"/>
+       			</form>
+			</form>
+		</div>
+		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+		<script defer src="https://use.fontawesome.com/releases/v5.7.2/js/all.js"></script>
+	</body>
+</html>
+

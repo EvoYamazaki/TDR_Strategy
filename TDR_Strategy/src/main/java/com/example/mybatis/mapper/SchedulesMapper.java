@@ -286,4 +286,17 @@ public interface SchedulesMapper {
         "where id = #{id,jdbcType=INTEGER}"
     })
     int updateByPrimaryKey(Schedules row);
+    
+    
+    @Select("SELECT LAST_INSERT_ID()")
+    int getLastInsertId();
+    //追加
+    List<Schedules> searchSchedules(@Param("park") Integer park,
+            @Param("keyword") String keyword,
+            @Param("scenes") List<Integer> scenes,
+            @Param("isHoliday") Boolean isHoliday,
+            @Param("numOfScenes") Integer numOfScenes);
+
+    //ここまで
+
 }

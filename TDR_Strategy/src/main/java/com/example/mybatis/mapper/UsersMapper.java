@@ -156,4 +156,10 @@ public interface UsersMapper {
         "where id = #{id,jdbcType=INTEGER}"
     })
     int updateByPrimaryKey(Users row);
+    
+    // 追加ito
+    @Update("UPDATE users SET name = #{name}, introduction = #{introduction}, age = #{age} WHERE id = #{id}")
+    void updateUser(@Param("id") Integer id, @Param("name") String name, @Param("introduction") String introduction, @Param("age") Integer age);
+    // ここまで
+
 }

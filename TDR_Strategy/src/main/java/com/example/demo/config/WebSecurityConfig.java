@@ -8,6 +8,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 
 import com.example.domain.UsersExample;
 
@@ -15,6 +17,14 @@ import com.example.domain.UsersExample;
 @MapperScan("com.example.mybatis.mapper")
 @EnableWebSecurity
 public class WebSecurityConfig {
+	
+    @Bean
+    public AuthenticationSuccessHandler successHandler() {
+        SimpleUrlAuthenticationSuccessHandler handler = new SimpleUrlAuthenticationSuccessHandler();
+        handler.setUseReferer(false); // リクエスト元のページに戻る場合はtrueに設定
+        handler.setDefaultTargetUrl("/home"); // ログイン後にリダイレクトするURL
+        return handler;
+    }
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -26,7 +36,7 @@ public class WebSecurityConfig {
 						,"/user/add"
 						,"/user/create"
 						,"/user/userpage/{id}"
-						,"/user/userpage/{id}/bookmarks"
+						,"/user/bookmarks/{id}"
 						,"/schedule"
 						,"/schedule/search"
 						,"/results"
@@ -36,6 +46,7 @@ public class WebSecurityConfig {
 			)
 			.formLogin((form) -> form
 				.loginPage("/login")
+				.successHandler(successHandler()) // 追加
 				.permitAll()
 			)
 			.logout((logout) -> logout.permitAll());
