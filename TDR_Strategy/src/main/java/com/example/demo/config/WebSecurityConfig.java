@@ -26,6 +26,7 @@ public class WebSecurityConfig {
 						,"/user/add"
 						,"/user/create"
 						,"/user/userpage/{id}"
+						,"/user/userpage/{id}/bookmarks"
 						,"/schedule"
 						,"/schedule/search"
 						,"/results"

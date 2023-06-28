@@ -29,6 +29,14 @@ public interface SchedulesMapper {
 	List<Schedules> selectAllByUserId(Integer user_id);
 	
 	@Select({
+	    "SELECT s.*",
+	    "FROM schedules s",
+	    "INNER JOIN bookmarks b ON s.id = b.schedule_id",
+	    "WHERE b.user_id = #{user_id}"
+	})
+	List<Schedules> selectBookmarksByUserId(Integer user_id);
+	
+	@Select({
 	    "select * from schedules where id = #{id}"
 	})
 	List<Schedules> selectById(Integer id);

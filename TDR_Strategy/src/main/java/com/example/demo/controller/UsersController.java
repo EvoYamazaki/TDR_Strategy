@@ -65,7 +65,7 @@ public class UsersController {
 	    System.out.println(loggedInUsername);
 //	    boolean isLoggedIn = authentication.isAuthenticated();
 	    boolean isLoggedIn = true;
-	    if(loggedInUsername == "anonymousUser") {
+	    if(loggedInUsername.equals("anonymousUser")) {
 	    	isLoggedIn = false;
 	    }
 	    model.addAttribute("isLoggedIn", isLoggedIn);
@@ -100,7 +100,7 @@ public class UsersController {
 	
 
 	//ユーザーページ
-	@GetMapping("user/userpage/{id}")
+	@GetMapping("/user/userpage/{id}")
 	public String userPage(
 		@PathVariable Integer id,
 		Model model,
@@ -209,6 +209,128 @@ public class UsersController {
 			schedulesView.add(scheduleList);
 		}
 		model.addAttribute("schedulesView", schedulesView);
+		
+		//user_idを渡す（ブックマーク表示用）
+		model.addAttribute("id", id);
 		return "user/userpage";
+	}
+	
+	
+	
+	//ユーザーページ(ブックマーク)
+	@GetMapping("/user/userpage/bookmarks/{id}")
+	public String userBookmarkPage(
+		@PathVariable Integer id,
+		Model model,
+		@AuthenticationPrincipal UserDetails userDetails) {
+		//ログイン情報の取得
+	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	    String loggedInUsername = authentication.getName();
+	    System.out.println(loggedInUsername);
+//	    boolean isLoggedIn = authentication.isAuthenticated();
+	    boolean isLoggedIn = true;
+	    if(loggedInUsername == "anonymousUser") {
+	    	isLoggedIn = false;
+	    }
+	    model.addAttribute("isLoggedIn", isLoggedIn);
+	    
+	    //アクセスしたページとログインIDが一致するか確認
+	    if(isLoggedIn) {
+	    	Integer loginUserId = getUserId(userDetails);
+		    boolean isMypage = false;
+		    if(loginUserId == id) {
+		    	isMypage = true;
+		    }
+		    model.addAttribute("isMypage", isMypage);
+	    }
+	    
+//		Integer loginUserId = getUserId(userDetails);
+		//Userの取得
+		List<Users> userList = usersMapper.selectById(id);
+		//表示用のデータリスト
+		List<String> userData = new ArrayList<>();
+		//要素を１つずつ取り出し、表示用のリストへ格納していく
+		for(Users user: userList) {
+			//ユーザー名の格納
+			userData.add(user.getName());
+			//年齢の格納
+			if(user.getAge() != null) {
+				userData.add(user.getAge().toString());
+			} else {
+				userData.add("非公開");
+			}
+			//紹介文の格納
+			if(user.getIntroduction() != null) {
+				userData.add(user.getIntroduction());
+			} else {
+				userData.add(" ");
+			}
+		}
+		model.addAttribute("userData", userData);
+		
+		
+		//Scheduleの取得
+		List<Schedules> userSchedules = schedulesMapper.selectBookmarksByUserId(id);
+		//表示用のデータリスト
+		List<List<String>> schedulesView = new ArrayList<>();
+		
+		//要素を１つずつ取り出し、表示用のリストへ格納していく
+		for(Schedules schedule: userSchedules) {
+			List<String> scheduleList = new ArrayList<String>();
+			//投稿者の名前を格納
+			scheduleList.add(usersMapper.selectNameById(id));
+			//パークを格納
+			switch(schedule.getPark()) {
+				case 0:
+					scheduleList.add("東京ディズニーランド");
+					break;
+				case 1:
+					scheduleList.add("東京ディズニーシー");
+					break;
+				default :
+					scheduleList.add("その他");
+					break;
+			}
+//			//来園日をフォーマット
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy/MM/dd (E)");
+			String formattedDate = formatter.format(schedule.getDate());
+			//来園日 + 休日フラグを格納
+			if(schedule.getHoliday()) {
+				scheduleList.add(formattedDate + "（土日祝）");
+			} else {
+				scheduleList.add(formattedDate + "（平日）");
+			}
+			//利用シーンを格納
+			//スケジュールに紐づく利用シーンを取得
+			List<UseScenes> useScenesList = RelationshipsMapper.selectByUseSeenes(schedule.getId());
+//			System.out.println(useScenesList);
+			//１つずつ取り出し、String型に変換（#○○  #○○）
+			StringBuilder sb = new StringBuilder();
+			for (int i = 0; i < useScenesList.size(); i++) {
+				sb.append("#");
+			    sb.append(useScenesList.get(i));
+			    if (i != useScenesList.size() - 1) {
+			        sb.append("  ");
+			    }
+			}
+			String useScenes = sb.toString();
+//			System.out.println(useScenes);
+			scheduleList.add(useScenes);
+			//ブクマ数を格納
+			List<Bookmarks> bookmarksList = bookmarksMapper.selectBySchedule_id(schedule.getId());
+			scheduleList.add(String.valueOf(bookmarksList.size()));
+			
+			//idを取得（投稿詳細画面遷移用）
+			scheduleList.add(schedule.getId().toString());
+			
+			//表示用のデータリストに格納
+			schedulesView.add(scheduleList);
+		}
+		model.addAttribute("schedulesView", schedulesView);
+		
+		//user_idを渡す（ブックマーク表示用）
+		model.addAttribute("id", id);
+		
+		return "user/userpage/bookmarks/" + id;
 	}
 }

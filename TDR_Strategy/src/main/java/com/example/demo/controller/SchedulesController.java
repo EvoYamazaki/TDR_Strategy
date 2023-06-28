@@ -15,10 +15,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.example.domain.Bookmarks;
 import com.example.domain.Schedules;
 import com.example.domain.UseScenes;
+import com.example.domain.Users;
 import com.example.mybatis.mapper.BookmarksMapper;
 import com.example.mybatis.mapper.RelationshipsMapper;
 import com.example.mybatis.mapper.SchedulesMapper;
@@ -42,6 +44,7 @@ public class SchedulesController {
 		@PathVariable Integer id,
 		Model model,
 		@AuthenticationPrincipal UserDetails userDetails){
+		
 		//ログイン情報の取得
 	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 	    String loggedInUsername = authentication.getName();
@@ -52,6 +55,7 @@ public class SchedulesController {
 	    	isLoggedIn = false;
 	    }
 	    model.addAttribute("isLoggedIn", isLoggedIn);
+	    
 	    
 		//Scheduleの取得
 		Schedules schedule = schedulesMapper.selectByPrimaryKey(id);
@@ -108,20 +112,75 @@ public class SchedulesController {
 			
 			//useridを取得（ユーザー画面遷移用）
 			scheduleList.add(schedule.getUserId().toString());
+			
+			//sucheduleidを取得（ブックマーク用）
+			scheduleList.add(schedule.getId().toString());
 //		}
 		model.addAttribute("scheduleList", scheduleList);
+		
+		if(isLoggedIn) {
+			//ブックマーク登録の確認
+			boolean BMCheck = bookmarkCheck(userDetails,id);
+			model.addAttribute("BMCheck", BMCheck);
+		}
 		
 		return "schedule";
 	}
 	
-	@PostMapping("schedule/{id}/")
+	//ブックマーク確認
+	public boolean bookmarkCheck(
+		@AuthenticationPrincipal UserDetails userDetails,
+		Integer id) {
+		boolean BMCheck = true;
+		
+		//ログイン中のユーザIDを取得
+		String userEmail = userDetails.getUsername();
+        Users users = usersMapper.selectByEmail(userEmail);
+        Integer userId = users.getId();
+		
+		List<Bookmarks> bookmark = bookmarksMapper.selectBySchedule_idANDUser_id(userId, id);
+		System.out.println(bookmark.size());
+		if(bookmark.size() == 0) {
+			BMCheck = false;
+		}
+		
+		return BMCheck;
+	}
+	
+	//ブックマーク登録
+	@PostMapping("schedule/{id}/bookmarkInsert")
 	public String bookmarkRegister(
 		@PathVariable Integer id,
 		Model model,
 		@AuthenticationPrincipal UserDetails userDetails){
+		System.out.println("メソッドには入ってるよ");
+		//ログイン中のユーザIDを取得
+		String userEmail = userDetails.getUsername();
+        Users users = usersMapper.selectByEmail(userEmail);
+        Integer userId = users.getId();
+		System.out.println("検索まで終わってるよ"+ userId);
+        
+		bookmarksMapper.bookmarkInsert(userId, id);
 		
+		System.out.println("DBアクセスしてるよ");
+		return "redirect:/schedule/" + id;
+	}
+	
+	//ブックマーク解除
+//	@DeleteMapping("schedule/{id}/bookmarkDelete")
+	@RequestMapping(value = "/schedule/{id}/bookmarkDelete", method = RequestMethod.POST)
+	public String bookmarkDelete(
+		@PathVariable Integer id,
+		Model model,
+		@AuthenticationPrincipal UserDetails userDetails) {
 		
-		
-		return "schedule/" + id;
+		//ログイン中のユーザIDを取得
+		String userEmail = userDetails.getUsername();
+        Users users = usersMapper.selectByEmail(userEmail);
+        Integer userId = users.getId();
+
+	    bookmarksMapper.bookmarkDelete(userId, id);
+
+	    return "redirect:/schedule/" + id;
 	}
 }

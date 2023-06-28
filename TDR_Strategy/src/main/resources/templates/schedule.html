@@ -47,5 +47,18 @@
 			<td th:text="${scheduleList[5]}"></td>
 		</tr>
 	</table>
+	<div th:if="${isLoggedIn}">
+		<div th:if="${BMCheck}">
+			<form th:action="@{/schedule/{id}/bookmarkDelete(id=${scheduleList[7]})}" method="post">
+				<input type="hidden" name="_method" value="post" />
+				<button type="submit">ブックマーク解除</button>
+			</form>
+		</div>
+		<div th:unless="${BMCheck}">
+			<form th:action="@{/schedule/{id}/bookmarkInsert(id=${scheduleList[7]})}" method="post">
+				<button type="submit">ブックマーク登録</button>
+			</form>
+		</div>
+	</div>
 </body>
 </html>
