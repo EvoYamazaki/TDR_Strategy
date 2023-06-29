@@ -30,7 +30,7 @@ import com.example.mybatis.mapper.SchedulesMapper;
 import com.example.mybatis.mapper.UseScenesMapper;
 import com.example.mybatis.mapper.UsersMapper;
 
-@RequestMapping("")
+@RequestMapping("/schedule")
 @Controller
 public class SchedulesController {
 	@Autowired
@@ -44,13 +44,32 @@ public class SchedulesController {
 	@Autowired
 	private UseScenesMapper useScenesMapper;
 	
+	//ログイン情報の取得
+	public boolean loginCheck(Model model) {
+	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	    String loggedInUsername = authentication.getName();
+	    System.out.println(loggedInUsername);
+	    boolean isLoggedIn = false;
+	    if(!loggedInUsername.equals("anonymousUser")) {
+	    	isLoggedIn = true;
+	    	Users loginUser = usersMapper.selectByEmail(loggedInUsername);
+	    	Integer loginUserId = loginUser.getId();
+	    	model.addAttribute("loginUserId", loginUserId);
+	    }
+	    model.addAttribute("isLoggedIn", isLoggedIn);
+	    return isLoggedIn;
+	}
+	
 	//新しいスケジュール投稿フォームを表示する
     @GetMapping("/new")
     public String showNewScheduleForm(Model model) {
+    	//ログイン情報の取得
+    	loginCheck(model);
+    	
     	//全ての使用シーンを取得
         List<UseScenes> allScenes = useScenesMapper.selectByExample(null);
         model.addAttribute("allScenes", allScenes);
-        return "new-schedule";
+        return "schedule/new-schedule";
     }
     
     //新しいスケジュールを提出する
@@ -97,28 +116,19 @@ public class SchedulesController {
         
         //成功フラグをモデルに追加し、新しいスケジュールフォームを表示する
         model.addAttribute("success", true);
-        return "success";
+        return "schedule/success";
     }
 
 	
 	//投稿詳細ページ
-	@GetMapping("/schedule/{id}")
+	@GetMapping("/{id}")
 	public String sucheduleDetailPage(
 		@PathVariable Integer id,
 		Model model,
 		@AuthenticationPrincipal UserDetails userDetails){
 		
 		//ログイン情報の取得
-	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-	    String loggedInUsername = authentication.getName();
-	    System.out.println(loggedInUsername);
-//	    boolean isLoggedIn = authentication.isAuthenticated();
-	    boolean isLoggedIn = true;
-	    if(loggedInUsername == "anonymousUser") {
-	    	isLoggedIn = false;
-	    }
-	    model.addAttribute("isLoggedIn", isLoggedIn);
-	    
+	    boolean isLoggedIn = loginCheck(model);
 	    
 		//Scheduleの取得
 		Schedules schedule = schedulesMapper.selectByPrimaryKey(id);
@@ -211,7 +221,7 @@ public class SchedulesController {
 	}
 	
 	//ブックマーク登録
-	@PostMapping("schedule/{id}/bookmarkInsert")
+	@PostMapping("/{id}/bookmarkInsert")
 	public String bookmarkRegister(
 		@PathVariable Integer id,
 		Model model,
@@ -229,7 +239,7 @@ public class SchedulesController {
 	
 	//ブックマーク解除
 //	@DeleteMapping("schedule/{id}/bookmarkDelete")
-	@RequestMapping(value = "/schedule/{id}/bookmarkDelete", method = RequestMethod.POST)
+	@RequestMapping(value = "/{id}/bookmarkDelete", method = RequestMethod.POST)
 	public String bookmarkDelete(
 		@PathVariable Integer id,
 		Model model,

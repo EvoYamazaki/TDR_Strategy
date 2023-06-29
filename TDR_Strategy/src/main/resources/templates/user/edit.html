@@ -5,55 +5,57 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>プロフィール編集画面</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        .text-center {
+            text-align: center;
+        }
+
+        .container {
+            padding: 20px;
+        }
+    </style>
 </head>
 <body>
-    <div th:replace="header :: header"></div>
-    <div class="container">
-    	<div class="row">
-    	<div class="col-1"></div>
-    	<div class="col-10">
-       <div class="text-center"><h1>プロフィール編集</h1></div>
-        <form th:object="${user}" method="post" th:action="@{/user/userpage/{id}(id=${user.id})}">
-            <table class="table">
-                <tr>
-                    <th>ユーザーネーム:</th>
-                    <td><small class="form-text text-muted" style="color: #FF0000">※必須　※10文字以内</small><input type="text" th:field="*{name}" class="form-control" /></td>
-                </tr>
-                <tr>
-                    <th>自己紹介:</th>
-                    <td><small class="form-text text-muted">※200文字以内</small><textarea th:field="*{introduction}" class="form-control"></textarea></td>
-                </tr>
-                <tr>
-                    <th>年齢:</th>
-                    <td><input type="text" th:field="*{age}" class="form-control" /></td>
-                </tr>
-                <tr>
-                    <th>メールアドレス:</th>
-                    <td><small class="form-text text-muted">※必須</small><input type="text" th:field="*{email}" class="form-control" /></td>
-                    
-                </tr>
-                <tr>
-                    <th>新しいパスワード</th>
-                    <td><input type="password" th:field="*{password}" class="form-control" /></td>
-                </tr>
-            </table>
-            <div class="text-center">
-                <button type="submit" class="btn btn-primary">プロフィール更新</button>
-            </div>
-            <br>
-            <div class="text-center">
-                <a class="btn btn-danger" href="/user/withdraw">退会</a>
-            </div>
-            </div>
-            <div class="col-1"></div>
-        </form>
-        </div>
-    </div>
+	<div th:replace="header :: header"></div>
+	<div class="container">
+		<div class="text-center"><h1>プロフィール編集</h1></div>
+		<form th:object="${user}" method="post" th:action="@{/user/userpage/{id}(id=${user.id})}">
+			<div class="form-group">
+				<label for="name">ユーザーネーム:</label>
+				<small class="form-text text-muted" style="color: #FF0000">※必須　※10文字以内</small>
+				<input type="text" th:field="*{name}" class="form-control" id="name">
+			</div>
+			<div class="form-group">
+				<label for="introduction">自己紹介:</label>
+				<small class="form-text text-muted">※200文字以内</small>
+				<textarea th:field="*{introduction}" class="form-control" id="introduction"></textarea>
+			</div>
+			<div class="form-group">
+					<label for="age">年齢:</label>
+				<input type="text" th:field="*{age}" class="form-control" id="age">
+			</div>
+			<div class="form-group">
+					<label for="email">メールアドレス:</label>
+				<small class="form-text text-muted">※必須</small>
+				<input type="text" th:field="*{email}" class="form-control" id="email">
+			</div>
+			<div class="form-group">
+					<label for="password">新しいパスワード:</label>
+				<input type="password" th:field="*{password}" class="form-control" id="password">
+			</div>
+			<div class="text-center">
+				<button type="submit" class="btn btn-primary">プロフィール更新</button>
+			</div>
+			<br>
+			<div class="text-center">
+				<a class="btn btn-danger" href="/user/withdraw">退会</a>
+			</div>
+		</form>
+	</div>
 
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <script defer src="https://use.fontawesome.com/releases/v5.7.2/js/all.js"></script>
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+	<script defer src="https://use.fontawesome.com/releases/v5.7.2/js/all.js"></script>
 </body>
 </html>
-

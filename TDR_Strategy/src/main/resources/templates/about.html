@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	 <meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>About</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+	<style>
+		.text-center {
+			text-align: center;
+		}
+
+		.highlight {
+			border: 2px solid #ccc;
+			padding: 10px;
+			margin: 10px;
+		}
+
+		.container {
+			padding: 20px;
+		}
+
+		.highlight-container {
+			margin: 20px;
+		}
+
+		@media (max-width: 576px) {
+			.highlight-container {
+				margin: 10px;
+			}
+		}
+	</style>
+</head>
+<body>
+	<div th:replace="header :: header"></div>
+	<div class="container">
+		<div class="text-center">
+			<h1>TDR_Strategyとは</h1>
+		</div>
+		<div class="highlight-container">
+			<div class="highlight">
+				<p>
+					私たちは、TDR_Strategyというプロジェクトを始めました。その目的は、東京ディズニーリゾートを無駄なく効率的に楽しむためのサポートを提供することです。<br><br>
+					私たちのサービスでは、ユーザーが自分の1日のスケジュールを自由に投稿し、共有することができます。これにより、多くの方々が快適にディズニーライフを楽しむことができるでしょう。私たちはその実現を願っています。<br><br>
+					スケジュールを投稿することは、次回の自分のためだけでなく、他の人のためにもなります。また、思い出を振り返る貴重な資料にもなるでしょう。<br><br>
+					皆さんの投稿が多く集まり、たくさんの人が快適に東京ディズニーリゾートを楽しめることを心から願っています。私たちのサービスに参加して、一緒に素晴らしいディズニー体験を共有しましょう。
+				</p>
+			</div>
+		</div>
+		<div class="text-center">
+			<h1>投稿入力例</h1>
+			<p>
+				時刻や待ち時間、プレミアアクセス、レストランの予約の有無、開催中のイベントなどの詳細を記載するとわかりやすいスケジュールになります！
+				<br>また、アトラクション名を正式名称で入力することで、検索に引っかかりやすくなります！
+			</p>
+		</div>
+		<div class="highlight-container">
+			<div class="highlight">
+				<p>
+					家族4人(未就学児、小学生)でディズニーランドに行ってきました！
+					<br>未就学児の子供もいたため、無理せず回りました！<br><br>
+					9:00　入園
+					<br>↓
+					<br>9:30　ワールドバザールにてミッキーと記念撮影
+					<br>(省略)<br><br>
+					レストランを予約しておけば、無駄なく動けたかなと後悔しています…
+					<br>ぜひ参考にしてみてください！
+				</p>
+			</div>
+		</div>
+	</div>
+
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+	<script defer src="https://use.fontawesome.com/releases/v5.7.2/js/all.js"></script>
+</body>
+</html>

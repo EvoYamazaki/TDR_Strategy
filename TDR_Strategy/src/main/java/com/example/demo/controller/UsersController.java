@@ -31,7 +31,7 @@ import com.example.mybatis.mapper.UsersMapper;
 /**
 * ユーザー情報 Controller
 */
-@RequestMapping("")
+@RequestMapping("/user")
 @Controller
 public class UsersController {
 	@Autowired
@@ -42,6 +42,22 @@ public class UsersController {
     private BookmarksMapper bookmarksMapper;
 	@Autowired
 	private UsersMapper usersMapper;
+	
+	//ログイン情報の取得
+	public boolean loginCheck(Model model) {
+	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	    String loggedInUsername = authentication.getName();
+	    System.out.println(loggedInUsername);
+	    boolean isLoggedIn = false;
+	    if(!loggedInUsername.equals("anonymousUser")) {
+	    	isLoggedIn = true;
+	    	Users loginUser = usersMapper.selectByEmail(loggedInUsername);
+	    	Integer loginUserId = loginUser.getId();
+	    	model.addAttribute("loginUserId", loginUserId);
+	    }
+	    model.addAttribute("isLoggedIn", isLoggedIn);
+	    return isLoggedIn;
+	}
 	
 	//ログイン済みユーザーIDの取得
     public Integer getUserId(@AuthenticationPrincipal UserDetails userDetails) {
@@ -58,18 +74,10 @@ public class UsersController {
 	* @param model Model
 	* @return ユーザー情報一覧画面
 	*/
-	@GetMapping("/user/add")
+	@GetMapping("/add")
 	public String displayAdd(Model model) {
 		//ログイン情報の取得
-	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-	    String loggedInUsername = authentication.getName();
-	    System.out.println(loggedInUsername);
-//	    boolean isLoggedIn = authentication.isAuthenticated();
-	    boolean isLoggedIn = true;
-	    if(loggedInUsername.equals("anonymousUser")) {
-	    	isLoggedIn = false;
-	    }
-	    model.addAttribute("isLoggedIn", isLoggedIn);
+		loginCheck(model);
 	    
 		// 入力フォームで取り扱うオブジェクトを設定
 		model.addAttribute("users", new Users());
@@ -83,7 +91,7 @@ public class UsersController {
 	*/
 
 	
-	@PostMapping("/user/create")
+	@PostMapping("/create")
 	public String submitNewUser(
 		@RequestParam("name") String name,
 		@RequestParam("email") String email,
@@ -101,21 +109,13 @@ public class UsersController {
 	
 
 	//ユーザーページ
-	@GetMapping("/user/userpage/{id}")
+	@GetMapping("/userpage/{id}")
 	public String userPage(
 		@PathVariable Integer id,
 		Model model,
 		@AuthenticationPrincipal UserDetails userDetails) {
 		//ログイン情報の取得
-	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-	    String loggedInUsername = authentication.getName();
-	    System.out.println(loggedInUsername);
-//	    boolean isLoggedIn = authentication.isAuthenticated();
-	    boolean isLoggedIn = true;
-	    if(loggedInUsername == "anonymousUser") {
-	    	isLoggedIn = false;
-	    }
-	    model.addAttribute("isLoggedIn", isLoggedIn);
+	    boolean isLoggedIn = loginCheck(model);
 	    
 	    //アクセスしたページとログインIDが一致するか確認
 	    if(isLoggedIn) {
@@ -217,8 +217,11 @@ public class UsersController {
 	}
 	
 	// ユーザープロフィール編集画面を表示
-	@GetMapping("/user/edit")
+	@GetMapping("/edit")
 	public String showProfileEdit(Model model, @AuthenticationPrincipal UserDetails userDetails) {
+		//ログイン情報の取得
+		loginCheck(model);
+		
 		Integer userId = getUserId(userDetails);
 		List<Users> usersList = usersMapper.selectById(userId);
 		if(!usersList.isEmpty()) {
@@ -228,7 +231,7 @@ public class UsersController {
 		return "user/edit";
 	}
 	
-	@PostMapping("/user/userpage/{id}")
+	@PostMapping("/userpage/{id}")
 	public String updateProfile(
 	        @AuthenticationPrincipal UserDetails userDetails,
 	        @ModelAttribute("user") Users updatedUser
@@ -248,12 +251,14 @@ public class UsersController {
 	}
 	
 	// 退会画面の表示
-	@GetMapping("/user/withdraw")
-	public String showWithdrawPage() {
+	@GetMapping("/withdraw")
+	public String showWithdrawPage(Model model) {
+		loginCheck(model);
+		
 		return "user/withdraw";
 	}
 	
-	@PostMapping("/user/complete-withdraw")
+	@PostMapping("/complete-withdraw")
 	public String withdrawUser(Model model, @AuthenticationPrincipal UserDetails userDetails) {
 		Integer userId = getUserId(userDetails);
 		usersMapper.deleteByPrimaryKey(userId);
@@ -262,21 +267,13 @@ public class UsersController {
 
 	
 	//ユーザーページ(ブックマーク)
-	@GetMapping("/user/bookmarks/{id}")
+	@GetMapping("/bookmarks/{id}")
 	public String userBookmarkPage(
 		@PathVariable Integer id,
 		Model model,
 		@AuthenticationPrincipal UserDetails userDetails) {
 		//ログイン情報の取得
-	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-	    String loggedInUsername = authentication.getName();
-	    System.out.println(loggedInUsername);
-//	    boolean isLoggedIn = authentication.isAuthenticated();
-	    boolean isLoggedIn = true;
-	    if(loggedInUsername == "anonymousUser") {
-	    	isLoggedIn = false;
-	    }
-	    model.addAttribute("isLoggedIn", isLoggedIn);
+	    boolean isLoggedIn = loginCheck(model);
 	    
 	    //アクセスしたページとログインIDが一致するか確認
 	    if(isLoggedIn) {

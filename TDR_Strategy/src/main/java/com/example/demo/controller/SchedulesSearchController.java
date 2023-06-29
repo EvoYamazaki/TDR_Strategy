@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.example.domain.Bookmarks;
 import com.example.domain.Schedules;
 import com.example.domain.UseScenes;
+import com.example.domain.Users;
 import com.example.mybatis.mapper.BookmarksMapper;
 import com.example.mybatis.mapper.RelationshipsMapper;
 import com.example.mybatis.mapper.SchedulesMapper;
@@ -24,7 +25,7 @@ import com.example.mybatis.mapper.UseScenesMapper;
 import com.example.mybatis.mapper.UsersMapper;
 
 @Controller
-@RequestMapping("")
+@RequestMapping("/schedule")
 public class SchedulesSearchController {
     @Autowired
     private SchedulesMapper schedulesMapper;
@@ -36,29 +37,36 @@ public class SchedulesSearchController {
     private RelationshipsMapper RelationshipsMapper;
 	@Autowired
     private BookmarksMapper bookmarksMapper;
-
-    // スケジュール検索画面を表示する
-    @GetMapping("/schedule/search")
-    public String searchScheduleForm(Model model) {
-		//ログイン情報の取得
+	
+	//ログイン情報の取得
+	public boolean loginCheck(Model model) {
 	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 	    String loggedInUsername = authentication.getName();
 	    System.out.println(loggedInUsername);
-//	    boolean isLoggedIn = authentication.isAuthenticated();
-	    boolean isLoggedIn = true;
-	    if(loggedInUsername == "anonymousUser") {
-	    	isLoggedIn = false;
+	    boolean isLoggedIn = false;
+	    if(!loggedInUsername.equals("anonymousUser")) {
+	    	isLoggedIn = true;
+	    	Users loginUser = usersMapper.selectByEmail(loggedInUsername);
+	    	Integer loginUserId = loginUser.getId();
+	    	model.addAttribute("loginUserId", loginUserId);
 	    }
 	    model.addAttribute("isLoggedIn", isLoggedIn);
+	    return isLoggedIn;
+	}
+
+    // スケジュール検索画面を表示する
+    @GetMapping("/search")
+    public String searchScheduleForm(Model model) {
+    	loginCheck(model);
     	
         // 全ての使用シーンを取得
         List<UseScenes> allScenes = useScenesMapper.selectByExample(null);
         model.addAttribute("allScenes", allScenes);
-        return "/schedule/search";
+        return "schedule/search";
     }
 
     // 検索条件の受け取り、検索結果の表示
-	@PostMapping("/schedule/search")
+	@PostMapping("/search")
     public String searchSchedule(Model model,
     	@RequestParam(value = "park", required = false) Integer park,
     	@RequestParam(value = "keyword", required = false) String keyword,
@@ -67,15 +75,7 @@ public class SchedulesSearchController {
     	@RequestParam(value = "numOfScenes", required = false) Integer numOfScenes) {
 		
 		//ログイン情報の取得
-	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-	    String loggedInUsername = authentication.getName();
-	    System.out.println(loggedInUsername);
-//	    boolean isLoggedIn = authentication.isAuthenticated();
-	    boolean isLoggedIn = true;
-	    if(loggedInUsername == "anonymousUser") {
-	    	isLoggedIn = false;
-	    }
-	    model.addAttribute("isLoggedIn", isLoggedIn);
+	    loginCheck(model);
 		
 		//useScenesの入力を確認、変換
 		StringBuilder sb = new StringBuilder();
@@ -206,18 +206,10 @@ public class SchedulesSearchController {
 		return "schedule/results";
     }
 	
-    @GetMapping("/schedule/results")
+    @GetMapping("/results")
     public String resultsSchedule(Model model) {
 		//ログイン情報の取得
-	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-	    String loggedInUsername = authentication.getName();
-	    System.out.println(loggedInUsername);
-//	    boolean isLoggedIn = authentication.isAuthenticated();
-	    boolean isLoggedIn = true;
-	    if(loggedInUsername == "anonymousUser") {
-	    	isLoggedIn = false;
-	    }
-	    model.addAttribute("isLoggedIn", isLoggedIn);
+    	loginCheck(model);
 //	    
 //	    //検索結果の取得
 //	    List<Schedules> schedulesView = (List<Schedules>) model.getAttribute("schedulesView");

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>新規スケジュール投稿</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+	<div th:replace="header :: header"></div>
+	<div class="container">
+		<div class="text-center"><h1>新規スケジュール投稿</h1></div>
+
+		<form th:action="@{/schedule/new}" method="post">
+			 <!-- パーク選択ラジオボタン -->
+      <div class="form-group">
+        <label style="font-size: 20px;">パーク選択</label>
+        <div class="row">
+        <div class="col-4">
+          <input type="radio" id="parkDisneyLand" name="park" value="0" />
+          <label for="parkDisneyLand">東京ディズニーランド</label>
+        </div>
+        <div class="col-4">
+          <input type="radio" id="parkDisneySea" name="park" value="1" />
+          <label for="parkDisneySea">東京ディズニーシー</label>
+        </div>
+        </div>
+      </div>
+			
+			<!-- 来園日選択カレンダー -->
+			<div class="form-group">
+				<label for="date">来園日</label>
+				<input type="date" id="date" name="date" class="form-control" style="max-width: 200px;" />
+			</div>
+			
+			<!-- 利用シーン選択チェックボックス -->
+			<div class="form-group">
+				<label for="scenes">利用シーン</label>
+				<div th:each="scene : ${allScenes}" class="form-check">
+					<input type="checkbox" id="scene" name="scenes" th:value="${scene.id}" th:checked="${scene.selected}" class="form-check-input" />
+					<label th:for="${'scene' + scene.id}" th:text="${scene.useSceneName}" class="form-check-label"></label>
+				</div>
+			</div>
+			
+			<!-- 平日/休日選択ラジオボタン -->
+			<div class="form-group">
+				<label for="holiday">平日/土日祝</label>
+				<div class="row">
+        	<div class="col-4">
+	          <input type="radio" id="weekend" name="holiday" value="false" />平日
+	        </div>
+	        <div class="col-4">
+    	      <input type="radio" id="holiday" name="holiday" value="true" />土日祝
+    	    </div>
+        </div>
+			</div>
+			
+			<!-- スケジュール詳細入力テキストエリア -->
+			<div class="form-group">
+				<label for="schedule">スケジュール詳細入力</label>
+				<textarea id="schedule" name="schedule" placeholder="スケジュールの詳細を入力してください&#10;時刻や待ち時間、プレミアアクセス、レストランの予約の有無、開催中のイベントなどの詳細を記載するとわかりやすいスケジュールになります！&#10;また、アトラクション名を正式名で入力することで、検索に引っかかりやすくなります！&#10;&#10;入力例：&#10;家族４人（未就学児人、小学生人）でディズニーランドに行ってきました！&#10;未就学児の子供もいたため、無理せず回りました！&#10;&#10;9:00 入園&#10;↓&#10;9:30 ワールドバザールにてミッキーと写真撮影&#10;（省略）&#10;&#10;レストランを予約しておけば、無駄なく動けたかなと後悔してます。。。&#10;是非参考にしてみてください！" rows="10" cols="100" class="form-control"></textarea>
+			</div>
+			
+			<div class="text-center">
+				<div class="form-group">
+					<button type="submit" class="btn btn-primary">投稿！</button>
+				</div>
+			</div>
+		</form>
+	</div>
+	
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+	<script defer src="https://use.fontawesome.com/releases/v5.7.2/js/all.js"></script>
+</body>
+</html>

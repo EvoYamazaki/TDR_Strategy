@@ -1,75 +1,114 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<link rel="stylesheet" th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.min.css}">
-<title>ユーザーぺージ</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>ユーザーページ</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+	<style>
+		.container {
+			text-align: center;
+		}
+
+		.edit-profile {
+			text-align: right;
+			margin-bottom: 10px;
+			padding: 20px;
+		}
+
+		.schedule-wrapper {
+			border: 1px solid #ccc;
+			border-radius: 5px;
+			padding: 10px;
+			margin-bottom: 10px;
+			cursor: pointer;
+			transition: background-color 0.3s ease;
+			width: 60%;
+		}
+
+		.schedule-wrapper:hover {
+			background-color: #f0f0f0;
+		}
+
+		.text-start {
+			text-align: start;
+		}
+	</style>
 </head>
 <body>
 <div th:replace="header :: header"></div>
-<h1>ユーザーページ</h1>
-<table th:object="${userData}">
-	<tr>
-		<th>ユーザー名：</th>
-		<th th:text="${userData[0]}"></th>
-	</tr>
-	<tr>
-		<th>年齢：</th>
-		<th th:text="${userData[1]}"></th>
-	</tr>
-	<tr>
-		<td th:text="${userData[2]}"></td>
-	</tr>
-	<tr>
-		<th th:if="${isMypage}"><a href="/user/edit">プロフィール編集</a></th>
-	</tr>
-<table>
-	<tr>
-		<h3>投稿一覧</h3>
-		<h3>
-			<a th:href="@{/user/bookmarks/{id}(id=${id})}">ブックマーク一覧</a>
-		</h3>
-	</tr>
-</table>	
-
-</table>
-	<table th:each="scheduleList : ${schedulesView}" class="align-middle">
-        <tr>
-        	<th>ユーザー名</th>
-        	<th>:</th>
-        	<td th:text="${scheduleList[0]}"></td>
-		</tr>
-        <tr>
-        	<th>パーク</th>
-        	<th>:</th>
-        	<td th:text="${scheduleList[1]}"></td>
+<div class="container">
+	<div class="edit-profile" th:if="${isMypage}">
+		<a href="/user/edit" class="btn btn-primary">プロフィール編集</a>
+	</div>
+	<h1>ユーザーページ</h1>
+	<table th:object="${userData}" class="mx-auto">
+		<tr>
+			<th class="col-3 text-start">ユーザー名：</th>
+			<td class="col-6 text-start" th:text="${userData[0]}"></td>
 		</tr>
 		<tr>
-        	<th>来園日</th>
-        	<th>:</th>
-        	
-        	<td th:text="${scheduleList[2]}"></td>
-
+			<th class="col-3 text-start">年齢：</th>
+			<td class="col-6 text-start" th:text="${userData[1]}"></td>
 		</tr>
 		<tr>
-        	<th>利用シーン</th>
-        	<th>:</th>
-        	<td th:text="${scheduleList[3]}"></td>
-		</tr>
-		<tr>
-        	<th>ブクマ数</th>
-        	<th>:</th>
-        	<td th:text="${scheduleList[4]}"></td>
-		</tr>
-		<tr>
-			<th>
-				<a th:href="@{/schedule/{id}(id=${scheduleList[5]})}" th:text="詳細"></a>
-			</th>
-		</tr>
-		<tr>
-			<br>
+			<td class="col-3"></td>
+			<td class="col-6 text-start" th:text="${userData[2]}"></td>
 		</tr>
 	</table>
 	
+	<div class="row">
+		<div class="col-3"></div>
+		<div style="padding-bottom: 5px;">
+			<ul class="nav nav-tabs">
+				<li class="nav-item"><a class="nav-link active">投稿一覧</a></li>
+				<li class="nav-item"><a th:href="@{/user/bookmarks/{id}(id=${id})}" class="nav-link">ブックマーク一覧</a></li>
+			</ul>
+		</div>
+	</div>
+	<div class="mx-auto">
+		<div th:each="scheduleList : ${schedulesView}">
+			<div class="row">
+				<div class="col-3"></div>
+				<div class="schedule-wrapper" th:onclick="|location.href='http://localhost:8080/schedule/__${scheduleList[5]}__'|">
+					<div class="row">
+						<div class="col-1"></div>
+						<div class="col-2 text-start"><strong>ユーザー名</strong></div>
+						<div class="col-1 text-right"><strong>:</strong></div>
+						<div class="col-8 text-start"><span th:text="${scheduleList[0]}"></span></div>
+					</div>
+					<div class="row">
+						<div class="col-1"></div>
+						<div class="col-2 text-start"><strong>パーク</strong></div>
+						<div class="col-1 text-right"><strong>:</strong></div>
+						<div class="col-8 text-start"><span th:text="${scheduleList[1]}"></span></div>
+					</div>
+					<div class="row">
+						<div class="col-1"></div>
+						<div class="col-2 text-start"><strong>来園日</strong></div>
+						<div class="col-1 text-right"><strong>:</strong></div>
+						<div class="col-8 text-start"><span th:text="${scheduleList[2]}"></span></div>
+					</div>
+					<div class="row">
+						<div class="col-1"></div>
+						<div class="col-2 text-start"><strong>利用シーン</strong></div>
+						<div class="col-1 text-right"><strong>:</strong></div>
+						<div class="col-8 text-start"><span th:text="${scheduleList[3]}"></span></div>
+					</div>
+					<div class="row">
+						<div class="col-1"></div>
+						<div class="col-2 text-start"><strong>ブクマ数</strong></div>
+						<div class="col-1 text-right"><strong>:</strong></div>
+						<div class="col-8 text-start"><span th:text="${scheduleList[4]}"></span></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script defer src="https://use.fontawesome.com/releases/v5.7.2/js/all.js"></script>
 </body>
 </html>

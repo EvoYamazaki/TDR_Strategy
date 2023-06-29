@@ -19,7 +19,7 @@ import com.example.domain.SchedulesExample;
 public interface SchedulesMapper {
 	//追加
 	@Select({
-	    "select * from schedules"
+	    "select * from schedules ORDER BY id DESC;"
 	})
 	List<Schedules> selectAll();
 	

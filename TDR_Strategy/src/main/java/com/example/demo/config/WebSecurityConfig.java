@@ -33,6 +33,7 @@ public class WebSecurityConfig {
 				.requestMatchers(
 						"/"
 						, "/home"
+						, "/about"
 						,"/user/add"
 						,"/user/create"
 						,"/user/userpage/{id}"

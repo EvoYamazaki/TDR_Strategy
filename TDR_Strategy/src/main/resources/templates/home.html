@@ -4,57 +4,83 @@
 <meta charset="UTF-8">
 <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.min.css}">
 <title>ホーム画面</title>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<style>
+		.container {
+			text-align: center;
+		}
+
+		.edit-profile {
+			text-align: right;
+			margin-bottom: 10px;
+			padding: 20px;
+		}
+
+		.schedule-wrapper {
+			border: 1px solid #ccc;
+			border-radius: 5px;
+			padding: 10px;
+			margin-bottom: 10px;
+			cursor: pointer;
+			transition: background-color 0.3s ease;
+			width: 60%;
+		}
+
+		.schedule-wrapper:hover {
+			background-color: #f0f0f0;
+		}
+
+		.text-start {
+			text-align: start;
+		}
+	</style>
 </head>
 <body>
 	<div th:replace="header :: header"></div>
-    <div class="container">
-        <h1 class="mb-5">TDR_Strategy</h1>
-        <h3>最新の投稿</h3>
-	        <table th:each="scheduleList : ${schedulesView}" class="align-middle">
-	        	
-		        <tr>
-		        	<th>ユーザー名</th>
-		        	<th>:</th>
-			        <td>
-			        	<a th:href="@{/user/userpage/{id}(id=${scheduleList[5]})}">
-			        		<div  th:text="${scheduleList[0]}"></div>
-			        	</a>
-			        </td>
-				</tr>
-		        <tr>
-		        	<th>パーク</th>
-		        	<th>:</th>
-		        	<td th:text="${scheduleList[1]}"></td>
-				</tr>
-				<tr>
-		        	<th>来園日</th>
-		        	<th>:</th>
-		        	
-		        	<td th:text="${scheduleList[2]}"></td>
-	
-				</tr>
-				<tr>
-		        	<th>利用シーン</th>
-		        	<th>:</th>
-		        	<td th:text="${scheduleList[3]}"></td>
-				</tr>
-				<tr>
-		        	<th>ブクマ数</th>
-		        	<th>:</th>
-		        	<td th:text="${scheduleList[4]}"></td>
-				</tr>
-				<tr>
-					<th>
-						<a th:href="@{/schedule/{id}(id=${scheduleList[6]})}" th:text="詳細"></a>
-					</th>
-				</tr>
-				<tr>
-					</br>
-				</tr>
-			
-			</table>
-    </div>
-    <script src="@{/webjars/jquery/3.4.1/jquery.min.js}"></script>
-    <script src="@{/webjars/bootstrap/4.3.1/js/bootstrap.min.js}"></script>
+	<div class="container">
+		<h1 class="mb-5">TDR_Strategy</h1>
+		<h3>最新の投稿</h3>
+		<div th:each="scheduleList : ${schedulesView}" class="align-middle">
+			<div class="row">
+				<div class="col-3"></div>
+				<div class="schedule-wrapper" th:onclick="|location.href='http://localhost:8080/schedule/__${scheduleList[6]}__'|">
+					<div class="row">
+						<div class="col-1"></div>
+						<div class="col-2 text-start"><strong>ユーザー名</strong></div>
+						<div class="col-1 text-right"><strong>:</strong></div>
+						<div class="col-8 text-start"><span th:text="${scheduleList[0]}"></span></div>
+					</div>
+					<div class="row">
+						<div class="col-1"></div>
+						<div class="col-2 text-start"><strong>パーク</strong></div>
+						<div class="col-1 text-right"><strong>:</strong></div>
+						<div class="col-8 text-start"><span th:text="${scheduleList[1]}"></span></div>
+					</div>
+					<div class="row">
+						<div class="col-1"></div>
+						<div class="col-2 text-start"><strong>来園日</strong></div>
+						<div class="col-1 text-right"><strong>:</strong></div>
+						<div class="col-8 text-start"><span th:text="${scheduleList[2]}"></span></div>
+					</div>
+					<div class="row">
+						<div class="col-1"></div>
+						<div class="col-2 text-start"><strong>利用シーン</strong></div>
+						<div class="col-1 text-right"><strong>:</strong></div>
+						<div class="col-8 text-start"><span th:text="${scheduleList[3]}"></span></div>
+					</div>
+					<div class="row">
+						<div class="col-1"></div>
+						<div class="col-2 text-start"><strong>ブクマ数</strong></div>
+						<div class="col-1 text-right"><strong>:</strong></div>
+						<div class="col-8 text-start"><span th:text="${scheduleList[4]}"></span></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+	<script defer src="https://use.fontawesome.com/releases/v5.7.2/js/all.js"></script>
 </body>
 </html>

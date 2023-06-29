@@ -1,32 +1,61 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
-    <head>
-        <title>Spring Security Example </title>
-    </head>
-    <body>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>ログイン</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+	<style>
+		.error-message {
+			color: red;
+			margin-top: 10px;
+		}
 
-        <div th:if="${param.error}">
-            ログインに失敗しました。
-        </div>
-        <div th:if="${param.logout}">
-            ログアウトされました。
-        </div>
-        <h1>ログイン</h1>
-        <form th:action="@{/login}" method="post">
-			<table class="table table-bordered col-md-6">
-				<tr class="form-group">
-					<th class="align-middle">メールアドレス</th>
-					<td><input type="text" name="username"/></td>
-				</tr>
-				<tr class="form-group">	
-		            <th class="align-middle">パスワード</th>
-		            <td><input type="password" name="password"/></td>
-				</tr>
-				</table>
-	            <div><input type="submit" value="ログイン"/></div>
-        </form>
-        <p>
-			新規登録は<a href="http://localhost:8080/user/add">こちら</a>
-		</p>
-    </body>
+		.form-label {
+			padding-right: 5px;
+		}
+        
+		.form-section{
+			margin-bottom: 20px;
+		}
+	</style>
+</head>
+<body>
+	<div th:replace="header :: header"></div>
+	<div class="container">
+		<div class="form-section"></div>
+		<div th:if="${param.error}" class="error-message">
+			ログインに失敗しました。
+		</div>
+		<div th:if="${param.logout}" class="error-message">
+			ログアウトされました。
+		</div>
+		<form th:action="@{/login}" method="post">
+			<div class="form-group row">
+				<label for="username" class="col-sm-3 col-form-label form-label">メールアドレス</label>
+				<div class="col-sm-9">
+					<input type="text" id="username" name="username" class="form-control" required />
+				</div>
+			</div>
+			<div class="form-group row">
+				<label for="password" class="col-sm-3 col-form-label form-label">パスワード</label>
+				<div class="col-sm-9">
+					<input type="password" id="password" name="password" class="form-control" required />
+				</div>
+			</div>
+			<div class="text-center">
+				<button type="submit" class="btn btn-primary">ログイン</button>
+			</div>
+			<div class="text-center">
+				<div class="form-section"></div>
+				<a href="/user/add">新規登録はこちら</a>
+			</div>
+		</form>
+	</div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.7.2/js/all.js"></script>
+</body>
 </html>

@@ -7,11 +7,19 @@
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
 <body>
-<div th:replace="header :: header"></div>
+	<div th:replace="header :: header"></div>
 	<div class="container">
-		<h1>退会完了</h1>
-		<p>退会が完了しました。<br>ご利用ありがとうございました。</p>
-		<a href="/home">HOMEに戻る</a>
+		<div class="row">
+			<div class="col-1"></div>
+			<div class="col-10">
+				<div class="text-center">
+					<h1>退会完了</h1>
+					<h5>退会が完了しました。<br>ご利用ありがとうございました。</h5>
+					<a class="btn btn-secondary" href="/home">HOMEに戻る</a>
+				</div>
+			</div>
+			<div class="col-1"></div>
+		</div>
 	</div>
 	
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
@@ -20,4 +28,3 @@
 	<script defer src="https://use.fontawesome.com/releases/v5.7.2/js/all.js"></script>
 </body>
 </html>
-

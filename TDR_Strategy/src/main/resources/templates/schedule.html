@@ -1,64 +1,69 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<link rel="stylesheet" th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.min.css}">
-<title>投稿詳細</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>投稿詳細</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
 </head>
 <body>
-	<div th:replace="header :: header"></div>
-	<h1>投稿詳細</h1>
-	<table th:object="${scheduleList}" class="align-middle">
-        <tr>
-        	<th>ユーザー名</th>
-        	<th>:</th>
-        	<td>
-        		<a th:href="@{/user/userpage/{id}(id=${scheduleList[6]})}">
-        			<div th:text="${scheduleList[0]}"></div>
-        		</a>
-        	</td>
-		</tr>
-        <tr>
-        	<th>パーク</th>
-        	<th>:</th>
-        	<td th:text="${scheduleList[1]}"></td>
-		</tr>
-		<tr>
-        	<th>来園日</th>
-        	<th>:</th>
-        	
-        	<td th:text="${scheduleList[2]}"></td>
+    <div th:replace="header :: header"></div>
+    <div class="container">
+        <h1>投稿詳細</h1>
+        <table class="table align-middle">
+            <tr>
+                <th>ユーザー名</th>
+                <th>:</th>
+                <td>
+                    <a th:href="@{/user/userpage/{id}(id=${scheduleList[6]})}">
+                        <div th:text="${scheduleList[0]}"></div>
+                    </a>
+                </td>
+            </tr>
+            <tr>
+                <th>パーク</th>
+                <th>:</th>
+                <td th:text="${scheduleList[1]}"></td>
+            </tr>
+            <tr>
+                <th>来園日</th>
+                <th>:</th>
+                <td th:text="${scheduleList[2]}"></td>
+            </tr>
+            <tr>
+                <th>利用シーン</th>
+                <th>:</th>
+                <td th:text="${scheduleList[3]}"></td>
+            </tr>
+            <tr>
+                <th>ブクマ数</th>
+                <th>:</th>
+                <td th:text="${scheduleList[4]}"></td>
+            </tr>
+            <tr>
+                <td colspan="3" th:text="${scheduleList[5]}"></td>
+            </tr>
+        </table>
+        <div class="text-center">
+	        <div th:if="${isLoggedIn}">
+		        <div th:if="${BMCheck}">
+		            <form th:action="@{/schedule/{id}/bookmarkDelete(id=${scheduleList[7]})}" method="post">
+		                <input type="hidden" name="_method" value="post" />
+		                <button class="btn btn-secondary" type="submit">ブックマーク解除</button>
+		            </form>
+		        </div>
+		        <div th:unless="${BMCheck}">
+		            <form th:action="@{/schedule/{id}/bookmarkInsert(id=${scheduleList[7]})}" method="post">
+		                <button class="btn btn-primary" type="submit">ブックマーク登録</button>
+		            </form>
+		        </div>
+	        </div>
+        </div>
 
-		</tr>
-		<tr>
-        	<th>利用シーン</th>
-        	<th>:</th>
-        	<td th:text="${scheduleList[3]}"></td>
-		</tr>
-		<tr>
-        	<th>ブクマ数</th>
-        	<th>:</th>
-        	<td th:text="${scheduleList[4]}"></td>
-		</tr>
-		<tr>
-			<br>
-		</tr>
-		<tr>
-			<td th:text="${scheduleList[5]}"></td>
-		</tr>
-	</table>
-	<div th:if="${isLoggedIn}">
-		<div th:if="${BMCheck}">
-			<form th:action="@{/schedule/{id}/bookmarkDelete(id=${scheduleList[7]})}" method="post">
-				<input type="hidden" name="_method" value="post" />
-				<button type="submit">ブックマーク解除</button>
-			</form>
-		</div>
-		<div th:unless="${BMCheck}">
-			<form th:action="@{/schedule/{id}/bookmarkInsert(id=${scheduleList[7]})}" method="post">
-				<button type="submit">ブックマーク登録</button>
-			</form>
-		</div>
-	</div>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.7.2/js/all.js"></script>
 </body>
 </html>

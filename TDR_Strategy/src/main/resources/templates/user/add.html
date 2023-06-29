@@ -1,35 +1,54 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-<title>ユーザー新規登録</title>
-<link href="@{/static/css/add.css}" rel="stylesheet"></link>
-<meta charset="utf-8" />
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>ユーザー新規登録</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+	<style>
+		.text-center {
+			text-align: center;
+		}
+		
+		.container {
+			padding: 20px;
+		}
+	</style>
 </head>
 <body>
-
-<h1>ユーザー新規登録</h1>
-<form th:action="@{/user/create}" th:object="${users}" method="post">
-<table>
-<tr>
-<th class="cell_title">名前</th>
-<th class="cell_required"></th>
-<td><input type="text" th:field="*{name}" id="user_name" /></td>
-</tr>
-<tr>
-<th class="cell_title">メールアドレス</th>
-<th class="cell_required"></th>
-<td><input type="text" th:field="*{email}" id="user_email"></td>
-</tr>
-<tr>
-<th class="cell_title">パスワード</th>
-<th class="cell_required"></th>
-<td><input type="text" th:field="*{password}" id="user_password"></td>
-</tr>
-</table>
-<div class="btn_area_center"><input type="submit" value="登録" class="btn"></div>
-</form>
-<p>
-	すでにアカウントをお持ちの方は<a href="login.html">こちら</a>
-</p>
+	<div th:replace="header :: header"></div>
+	<div class="container">
+		<div class="text-center"><h1>ユーザー新規登録</h1></div>
+		<form th:action="@{/user/create}" th:object="${users}" method="post">
+			<div class="form-group">
+				<label for="user_name">ユーザーネーム</label>
+				<input type="text" th:field="*{name}" id="user_name" class="form-control" />
+			</div>
+			<div class="form-group">
+				<label for="user_email">メールアドレス</label>
+				<input type="text" th:field="*{email}" id="user_email" class="form-control" />
+			</div>
+			<div class="form-group">
+				<label for="user_password">パスワード</label>
+				<input type="password" th:field="*{password}" id="user_password" class="form-control" />
+			</div>
+			
+			<div class="text-center">
+				<div class="btn_area_center"><input type="submit" value="登録" class="btn btn-primary"></div>
+			</div>
+		</form>	
+		<div class="container">
+			<div class="text-center">
+				<p>
+					すでにアカウントをお持ちの方は<a href="/login">こちら</a>
+				</p>
+			</div>
+		</div>
+	</div>
+	
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+	<script defer src="https://use.fontawesome.com/releases/v5.7.2/js/all.js"></script>
 </body>
 </html>

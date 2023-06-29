@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.example.domain.Bookmarks;
 import com.example.domain.Schedules;
 import com.example.domain.UseScenes;
+import com.example.domain.Users;
 import com.example.mybatis.mapper.BookmarksMapper;
 import com.example.mybatis.mapper.RelationshipsMapper;
 import com.example.mybatis.mapper.SchedulesMapper;
@@ -32,23 +33,32 @@ public class HomeController {
 	@Autowired
     private BookmarksMapper bookmarksMapper;
 	
+	//ログイン情報の取得
+	public boolean loginCheck(Model model) {
+	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	    String loggedInUsername = authentication.getName();
+	    System.out.println(loggedInUsername);
+	    boolean isLoggedIn = false;
+	    if(!loggedInUsername.equals("anonymousUser")) {
+	    	isLoggedIn = true;
+	    	Users loginUser = usersMapper.selectByEmail(loggedInUsername);
+	    	Integer loginUserId = loginUser.getId();
+	    	model.addAttribute("loginUserId", loginUserId);
+	    }
+	    model.addAttribute("isLoggedIn", isLoggedIn);
+	    return isLoggedIn;
+	}
+	
+	
 	//投稿一覧の表示(一旦)
 	@GetMapping("/home")
 	public String indexSchedules(Model model) {
 		//ログイン情報の取得
-	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-	    String loggedInUsername = authentication.getName();
-	    System.out.println(loggedInUsername);
-//	    boolean isLoggedIn = authentication.isAuthenticated();
-	    boolean isLoggedIn = true;
-	    if(loggedInUsername == "anonymousUser") {
-	    	isLoggedIn = false;
-	    }
-	    model.addAttribute("isLoggedIn", isLoggedIn);
+		loginCheck(model);
 		
 		
 		//Schedulesの取得
-		List<Schedules> allSchedules = schedulesMapper.selectByExample(null);
+		List<Schedules> allSchedules = schedulesMapper.selectAll();
 		//表示用のデータリスト
 		List<List<String>> schedulesView = new ArrayList<>();
 		
@@ -56,8 +66,7 @@ public class HomeController {
 		for(Schedules schedule: allSchedules) {
 			List<String> scheduleList = new ArrayList<String>();
 			//投稿者の名前を格納
-			
-			scheduleList.add(usersMapper.selectNameById(schedule.getUserId()));
+			scheduleList.add(usersMapper.selectNameById(schedulesMapper.selectUserIdById(schedule.getId())));
 			//パークを格納
 			switch(schedule.getPark()) {
 				case 0:
@@ -100,7 +109,7 @@ public class HomeController {
 			scheduleList.add(String.valueOf(bookmarksList.size()));
 			
 			//useridを取得（ユーザー画面遷移用）
-			scheduleList.add(schedule.getUserId().toString());
+			scheduleList.add(schedulesMapper.selectUserIdById(schedule.getId()).toString());
 			
 			//idを取得（投稿詳細画面遷移用）
 			scheduleList.add(schedule.getId().toString());
