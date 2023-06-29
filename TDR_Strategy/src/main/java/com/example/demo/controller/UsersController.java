@@ -13,6 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -215,7 +216,50 @@ public class UsersController {
 		return "user/userpage";
 	}
 	
+	// ユーザープロフィール編集画面を表示
+	@GetMapping("/user/edit")
+	public String showProfileEdit(Model model, @AuthenticationPrincipal UserDetails userDetails) {
+		Integer userId = getUserId(userDetails);
+		List<Users> usersList = usersMapper.selectById(userId);
+		if(!usersList.isEmpty()) {
+			Users user = usersList.get(0);
+			model.addAttribute("user", user);
+		}
+		return "user/edit";
+	}
 	
+	@PostMapping("/user/userpage/{id}")
+	public String updateProfile(
+	        @AuthenticationPrincipal UserDetails userDetails,
+	        @ModelAttribute("user") Users updatedUser
+	) {
+	    String userEmail = userDetails.getUsername();
+	    Users user = usersMapper.selectByEmail(userEmail);
+	    user.setName(updatedUser.getName());
+	    user.setIntroduction(updatedUser.getIntroduction());
+	    user.setAge(updatedUser.getAge());
+	    user.setEmail(updatedUser.getEmail());
+	    if (!updatedUser.getPassword().isEmpty()) {
+	        String encryptedPassword = new BCryptPasswordEncoder().encode(updatedUser.getPassword());
+	        user.setPassword(encryptedPassword);
+	    }
+	    usersMapper.updateByPrimaryKeySelective(user);
+	    return "redirect:/user/userpage/" + user.getId();
+	}
+	
+	// 退会画面の表示
+	@GetMapping("/user/withdraw")
+	public String showWithdrawPage() {
+		return "user/withdraw";
+	}
+	
+	@PostMapping("/user/complete-withdraw")
+	public String withdrawUser(Model model, @AuthenticationPrincipal UserDetails userDetails) {
+		Integer userId = getUserId(userDetails);
+		usersMapper.deleteByPrimaryKey(userId);
+		return "user/complete-withdraw";
+	}
+
 	
 	//ユーザーページ(ブックマーク)
 	@GetMapping("/user/bookmarks/{id}")
