@@ -101,6 +101,10 @@ public class UsersController {
 		if(name.equals("") || email.equals("") || password.equals("")) {
 			return "error";
 		}
+		if(usersMapper.selectByEmail(email) != null) {
+			return "error";
+		}
+		
 		String pass = new BCryptPasswordEncoder().encode(password);
 		// userRequestに入力フォームの内容が格納されている
 //		System.out.println(name);
