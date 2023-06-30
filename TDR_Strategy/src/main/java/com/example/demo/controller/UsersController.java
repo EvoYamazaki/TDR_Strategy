@@ -98,6 +98,9 @@ public class UsersController {
 		@RequestParam("password") String password,
 		Authentication authentication,
 		Model model) {
+		if(name.equals("") || email.equals("") || password.equals("")) {
+			return "error";
+		}
 		String pass = new BCryptPasswordEncoder().encode(password);
 		// userRequestに入力フォームの内容が格納されている
 //		System.out.println(name);

@@ -83,6 +83,9 @@ public class SchedulesController {
             @AuthenticationPrincipal UserDetails userDetails,
             Authentication authentication,
             Model model) {
+    	//ログイン情報の取得
+  		loginCheck(model);
+    	
 //    	// ログインユーザーのIDを取得
     	String userEmail = userDetails.getUsername();
         Users users = usersMapper.selectByEmail(userEmail);
@@ -118,6 +121,15 @@ public class SchedulesController {
         model.addAttribute("success", true);
         return "schedule/success";
     }
+    
+  //投稿完了ページ
+  	@GetMapping("/success")
+  	public String succesPage(Model model){
+  		//ログイン情報の取得
+  		loginCheck(model);
+  		
+  		return "schedule/success";
+  	}
 
 	
 	//投稿詳細ページ
