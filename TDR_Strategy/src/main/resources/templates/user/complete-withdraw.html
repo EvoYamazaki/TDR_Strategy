@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="https://www.thymeleaf.org">
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -15,7 +15,9 @@
 				<div class="text-center">
 					<h1>退会完了</h1>
 					<h5>退会が完了しました。<br>ご利用ありがとうございました。</h5>
-					<a class="btn btn-secondary" href="/home">HOMEに戻る</a>
+					<form th:action="@{/logout}" method="post">
+						<input type="submit" value="HOMEに戻る"/>
+					</form>
 				</div>
 			</div>
 			<div class="col-1"></div>

@@ -1,86 +1,158 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-<meta charset="UTF-8">
-<link rel="stylesheet" th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.min.css}">
-<title>ホーム画面</title>
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-<style>
-		.container {
-			text-align: center;
-		}
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.min.css}">
+    <title>ホーム画面</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        .container {
+            text-align: center;
+        }
 
-		.edit-profile {
-			text-align: right;
-			margin-bottom: 10px;
-			padding: 20px;
-		}
+        .edit-profile {
+            text-align: right;
+            margin-bottom: 10px;
+            padding: 20px;
+        }
 
-		.schedule-wrapper {
-			border: 1px solid #ccc;
-			border-radius: 5px;
-			padding: 10px;
-			margin-bottom: 10px;
-			cursor: pointer;
-			transition: background-color 0.3s ease;
-			width: 60%;
-		}
+        .schedule-wrapper {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
 
-		.schedule-wrapper:hover {
-			background-color: #f0f0f0;
-		}
+        .schedule-wrapper:hover {
+            background-color: #f0f0f0;
+        }
 
-		.text-start {
-			text-align: start;
-		}
-	</style>
+        .text-start {
+            text-align: start;
+        }
+
+        #sidebar {
+            position: fixed;
+            top: 0;
+            background-color: #FFFFFF;
+            padding: 20px;
+            border: 1px solid #87CEEB;
+            border-radius: 5px;
+        }
+
+        .nav-item {
+            margin-bottom: 10px;
+            list-style: none;
+        }
+        
+        .nav-link {
+            color: #000;
+            font-weight: bold;
+        }
+
+        .nav-link:hover {
+            color: #007bff;
+        }
+
+        .nav-item::before {
+            content: none;
+        }
+    </style>
 </head>
+
 <body>
-	<div th:replace="header :: header"></div>
-	<div class="container">
-		<h1 class="mb-5">TDR_Strategy</h1>
-		<h3>最新の投稿</h3>
-		<div th:each="scheduleList : ${schedulesView}" class="align-middle">
-			<div class="row">
-				<div class="col-3"></div>
-				<div class="schedule-wrapper" th:onclick="|location.href='http://localhost:8080/schedule/__${scheduleList[6]}__'|">
-					<div class="row">
-						<div class="col-1"></div>
-						<div class="col-2 text-start"><strong>ユーザー名</strong></div>
-						<div class="col-1 text-right"><strong>:</strong></div>
-						<div class="col-8 text-start"><span th:text="${scheduleList[0]}"></span></div>
-					</div>
-					<div class="row">
-						<div class="col-1"></div>
-						<div class="col-2 text-start"><strong>パーク</strong></div>
-						<div class="col-1 text-right"><strong>:</strong></div>
-						<div class="col-8 text-start"><span th:text="${scheduleList[1]}"></span></div>
-					</div>
-					<div class="row">
-						<div class="col-1"></div>
-						<div class="col-2 text-start"><strong>来園日</strong></div>
-						<div class="col-1 text-right"><strong>:</strong></div>
-						<div class="col-8 text-start"><span th:text="${scheduleList[2]}"></span></div>
-					</div>
-					<div class="row">
-						<div class="col-1"></div>
-						<div class="col-2 text-start"><strong>利用シーン</strong></div>
-						<div class="col-1 text-right"><strong>:</strong></div>
-						<div class="col-8 text-start"><span th:text="${scheduleList[3]}"></span></div>
-					</div>
-					<div class="row">
-						<div class="col-1"></div>
-						<div class="col-2 text-start"><strong>ブクマ数</strong></div>
-						<div class="col-1 text-right"><strong>:</strong></div>
-						<div class="col-8 text-start"><span th:text="${scheduleList[4]}"></span></div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-	<script defer src="https://use.fontawesome.com/releases/v5.7.2/js/all.js"></script>
+    <div class="container">
+        <h1 class="mb-5" style="margin: 50px;">
+        	<img th:src="@{/images/TDR_Strategy.png}" alt="TDR_Strategy">
+        </h1>
+        <div class="row">
+            <div class="col-9">
+                <h3 class="text-left">最新の投稿</h3>
+                <div th:each="scheduleList : ${schedulesView}" class="align-middle">
+                    <div class="row">
+                        <div class="col-1"></div>
+                        <div class="col-11">
+                            <div class="schedule-wrapper"
+                                th:onclick="|location.href='http://localhost:8080/schedule/__${scheduleList[6]}__'|">
+                                <div class="row">
+                                    <div class="col-3 text-start"><strong>ユーザー名</strong></div>
+                                    <div class="col-1 text-right"><strong>:</strong></div>
+                                    <div class="col-8 text-start"><span th:text="${scheduleList[0]}"></span></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-3 text-start"><strong>パーク</strong></div>
+                                    <div class="col-1 text-right"><strong>:</strong></div>
+                                    <div class="col-8 text-start"><span th:text="${scheduleList[1]}"></span></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-3 text-start"><strong>来園日</strong></div>
+                                    <div class="col-1 text-right"><strong>:</strong></div>
+                                    <div class="col-8 text-start"><span th:text="${scheduleList[2]}"></span></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-3 text-start"><strong>利用シーン</strong></div>
+                                    <div class="col-1 text-right"><strong>:</strong></div>
+                                    <div class="col-8 text-start"><span th:text="${scheduleList[3]}"></span></div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-3 text-start"><strong>ブクマ数</strong></div>
+                                    <div class="col-1 text-right"><strong>:</strong></div>
+                                    <div class="col-8 text-start"><span th:text="${scheduleList[4]}"></span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3">
+				<div class="row">
+	                <aside id="sidebar" style="margin-top: 180px; padding: 5px;">
+	                    <ul class="text-center" style="padding-left: 0px;">
+	                    	<li class="nav-item" style="margin: 0px; padding: 0px; font-size: 15px;"><a>みんなの投稿を検索！</a></li>
+	                        <li class="nav-item">
+	                            <a class="nav-link btn btn-info" style="background-color: #87CEEB;" href="/schedule/search">検索</a>
+	                        </li>
+	                        <li class="nav-item" style="margin: 0px; padding: 0px; font-size: 15px;"><a>TDR_Strategyとは？</a></li>
+	                        <li class="nav-item">
+	                            <a class="nav-link btn btn-info" style="background-color: #87CEEB;" href="/about">ABOUT</a>
+	                        </li>
+	                        <!-- ログイン状態に応じて表示を切り替え -->
+	                        <li th:if="${isLoggedIn}" class="nav-item" style="margin: 0px; padding: 0px; font-size: 15px;"><a>TDRでのスケジュールを<br>みんなに共有しよう！</a></li>
+	                        <li th:if="${isLoggedIn}" class="nav-item">
+	                            <a class="nav-link btn btn-info" style="background-color: #87CEEB;" href="/schedule/new">投稿</a>
+	                        </li>
+	                        <li th:unless="${isLoggedIn}" class="nav-item" style="margin: 0px; padding: 0px; font-size: 15px;"><a>既にアカウントを<br>お持ちの方はこちら</a></li>
+	                        <li th:unless="${isLoggedIn}" class="nav-item">
+	                            <a class="nav-link btn btn-info" style="background-color: #87CEEB;" href="/login">ログイン</a>
+	                        </li>
+	                        <li th:unless="${isLoggedIn}" class="nav-item" style="margin: 0px; padding: 0px; font-size: 15px;"><a>アカウントを登録して<br>ブックマーク機能を<br>利用しよう</a></li>
+	                        <li th:unless="${isLoggedIn}" class="nav-item">
+	                            <a class="nav-link btn btn-info" style="background-color: #87CEEB;" href="/user/add">新規登録</a>
+	                        </li>
+	                        <li th:if="${isLoggedIn}" class="nav-item" style="margin: 0px; padding: 0px; font-size: 15px;"><a>Sing Outはこちらから</a></li>
+                       		<li th:if="${isLoggedIn}" class="nav-item">
+                            	<form th:action="@{/logout}" method="post">
+                                	<button class="nav-link btn btn-info col-12" style="background-color: #87CEEB;" type="submit">Sign Out</button>
+                            	</form>
+                        	</li>
+                        	<li th:if="${isLoggedIn}" class="nav-item" style="margin: 0px; padding: 0px; font-size: 15px;"><a>マイページで<br>自分の情報を管理</a></li>
+	                        <li th:if="${isLoggedIn}" class="nav-item">
+	                            <a class="nav-link btn btn-info" style="background-color: #87CEEB;" th:href="@{/user/userpage/{id}(id=${loginUserId})}">マイページ</a>
+	                        </li>
+	                    </ul>
+	                </aside>
+	        	</div>
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.7.2/js/all.js"></script>
 </body>
+
 </html>
+

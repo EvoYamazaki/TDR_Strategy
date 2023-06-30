@@ -104,7 +104,7 @@ public class UsersController {
 //		System.out.println(email);
 //		System.out.println(pass);
 		usersMapper.userInsert(name, email, pass);
-		return "home";
+		return "login";
 	}
 	
 
@@ -262,6 +262,7 @@ public class UsersController {
 	public String withdrawUser(Model model, @AuthenticationPrincipal UserDetails userDetails) {
 		Integer userId = getUserId(userDetails);
 		usersMapper.deleteByPrimaryKey(userId);
+//		SecurityContextHolder.clearContext();
 		return "user/complete-withdraw";
 	}
 

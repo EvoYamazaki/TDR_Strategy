@@ -41,8 +41,9 @@ public class WebSecurityConfig {
 						,"/schedule"
 						,"/schedule/search"
 						,"/results"
-						,"schedule/results"
-						,"schedule/{id}").permitAll()
+						,"/schedule/results"
+						,"/schedule/{id}"
+						,"/images/TDR_Strategy.png").permitAll()
 				.anyRequest().authenticated()
 			)
 			.formLogin((form) -> form

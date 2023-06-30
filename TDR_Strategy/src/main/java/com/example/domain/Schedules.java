@@ -191,7 +191,11 @@ public class Schedules {
      * @mbg.generated Thu Jun 08 09:58:52 JST 2023
      */
     public String getSchedule() {
-        return schedule;
+		if(schedule != null && !schedule.isEmpty()){
+			return schedule.replaceAll("\n", "<br/>");
+		}else{
+			return schedule;
+		}
     }
 
     /**
